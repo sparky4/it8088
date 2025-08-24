@@ -467,9 +467,9 @@ Set5NumValues           Label   Word
 
 HeaderMsg1              Label   Byte
 IF SHOWVERSION
-                        DB      0FFh, 9, ' ', "Impulse Tracker XT v2.14 Copyright (C) 1995-2000 Jeffrey Lim", 13
+                        DB      0FFh, 9, ' ', "Impulse Tracker XT v0.00 Copyright (C) 1995-2000 Jeffrey Lim && 2025 sparky4", 13
 ELSE
-                        DB      0FFh, 12, ' ', "Impulse Tracker XT Copyright (C) 1995-2000 Jeffrey Lim", 13
+                        DB      0FFh, 12, ' ', "Impulse Tracker XT Copyright (C) 1995-2000 Jeffrey Lim && 2025 sparky4", 13
 ENDIF
                         DB      0FFh, 9, ' ', 0FEh, 21h, 139, 0FFh, 25, 134, 138, 0FFh, 11, ' ', 139, 0FFh, 28, 134, 138, 13
                         DB      0FEh, 20h, "Song Name", 0FEh, 21h, 132, 0FEh, 5, 0FFh, 25, ' ', 0FEh, 23h, 131, 0FEh, 20h, 0
@@ -4557,9 +4557,30 @@ F_Post5Num9:
                 Mov     CX, 7
 
 F_Post5Num10:
-                IMul    EAX, 10
-                MovZX   EBX, Word Ptr [CS:DI]
-                Add     EAX, EBX
+;;                IMul    EAX, 10
+;;                MovZX   EBX, Word Ptr [CS:DI]
+;;                Add     EAX, EBX
+; IMul EAX, 10 becomes:
+Mov     BX, 10              ; Multiplier
+Mul     BX                  ; AX = AX * BX, result in DX:AX
+Add     AX, AX              ; AX = AX * 2
+Adc     DX, DX              ; DX = DX * 2 + carry, result = 20*AX_old
+; Since 10 = 8 + 2, and 8 = 2*2*2
+; Use shift operations for multiplication by powers of 2
+Shl     AX, 1               ; Multiply AX by 2
+Rol     DX, 1               ; Rotate DX and carry to multiply by 2
+Shl     AX, 1               ; Multiply AX by 2
+Rol     DX, 1               ; Rotate DX and carry to multiply by 2
+Shl     AX, 1               ; Multiply AX by 2
+Rol     DX, 1               ; Rotate DX and carry to multiply by 2
+
+; MovZX EBX, Word Ptr [CS:DI] becomes:
+Mov     BX, Word Ptr [CS:DI] ; Load word into BX
+Mov     CX, 0               ; Clear high part of 32-bit value
+
+; Add EAX, EBX becomes:
+Add     AX, BX              ; Add low words
+Adc     DX, CX              ; Add high words with carry
 
 ;                Add     DI, 2
                 ScasW

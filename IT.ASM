@@ -790,7 +790,7 @@ NoPause:
                 Mov     [Word Ptr COMSPEC+2], ES
 
 Start2:
-;                Mov     FS, [CS:PSP]
+;;                Mov     FS, [CS:PSP]
                 Mov     AX, [CS:PSP]
 
                 Trace   "Initialising Screen Module"

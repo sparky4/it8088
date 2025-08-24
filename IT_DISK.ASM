@@ -6,7 +6,7 @@ include switch.inc
 include network.inc
 
                         Jumps
-                        .386
+                        .8086
 
 ;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 ;³ Externals                                                                   ³
@@ -8163,7 +8163,7 @@ D_SaveInstrument4:
                                         ; headerfilesize=554(instrumentheader)+
                                         ; 80*AH.
                 Mov     AL, 80
-                Mul     AH     
+                Mul     AH
                 Add     AX, 554         ; AX = header size.
 
                 Push    AX

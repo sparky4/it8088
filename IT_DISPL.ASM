@@ -4548,6 +4548,7 @@ MOV WORD PTR [DisplayWindows+4], 0026h
 ; Move the high word (0x077D) to the higher 16 bits of the destination address.
 ; The high word is stored at an offset of +2 from the low word.
 MOV WORD PTR [DisplayWindows+6], 077Dh
+
 ;;; Move the low word of the constant into a register and then to memory
 ;;mov ax, 0026h           ; Load the low 16 bits of the constant into AX
 ;;mov word ptr [DisplayWindows+4], ax ; Store AX into the first half of the DWORD
