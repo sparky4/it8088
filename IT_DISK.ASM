@@ -645,7 +645,7 @@ IF SAVESAMPLEWAV
 ENDIF
 
 DiskOptions             DB      0
-EditTimer               DD      0
+EditTimer               DW      0
 
 CDRomStartDrive         DB      0               ; The first CDRom Drive letter
 CDRomEndDrive           DB      0               ; The drive AFTER the last cdrom

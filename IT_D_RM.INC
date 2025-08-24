@@ -78,7 +78,8 @@ Proc            D_PostLoadModule Far
                 Mov     [TopTimerData], 0
 
                 Call    GetTimerCounter
-                Mov     [EditTimer], EAX
+;;                Mov     [EditTimer], EAX
+                Mov     [EditTimer], AX
 
                 Call    PE_ResetOrderPattern
 
@@ -92,7 +93,18 @@ EndP            D_PostLoadModule
 
 Proc            D_InsertOrder           ; DX = inserting pattern, BP = current
                                         ; ES = songdata
-                PushA
+;;                PushA
+; Emulation of the PUSHA instruction
+; On entry, SP holds its current value
+;
+push ax       ; Push AX
+push cx       ; Push CX
+push dx       ; Push DX
+push bx       ; Push BX
+push sp       ; Push the ORIGINAL value of SP
+push bp       ; Push BP
+push si       ; Push SI
+push di       ; Push DI
                 Push    DS
 
                 Push    ES
@@ -111,7 +123,18 @@ D_InsertOrderResume:
                 JAE     D_InsertOrder1
 
                 Pop     DS
-                PopA
+;;                PopA
+; Emulation of the POPA instruction
+;
+pop di        ; Pop DI
+pop si        ; Pop SI
+pop bp        ; Pop BP
+add sp, 2     ; Skip the saved SP value
+pop bx        ; Pop BX
+pop dx        ; Pop DX
+pop cx        ; Pop CX
+pop ax        ; Pop AX
+
                 Ret
 
 D_InsertOrder2:
@@ -630,7 +653,7 @@ D_LoadXMSamples1:
 
                 Mov     AH, [SI+12]     ; Default volume
                 Mov     AL, 0
-                Cmp     DWord Ptr [SI], 0       ; Length = 0?
+                Cmp     Word Ptr [SI], 0       ; Length = 0?
                 JE      D_LoadXMSamples3
 
                                         ; Grab the panning value
@@ -669,7 +692,7 @@ D_LoadXMSamples2:
                 And     CL, 3
                 JZ      D_LoadXMSamples3 ; No loop
                                          ; CL = 1 or 2
-                Cmp     DWord Ptr [SI+8], 1
+                Cmp     Word Ptr [SI+8], 1
                 JBE     D_LoadXMSamples3
 
                 Or      AL, 10h          ; Loop
@@ -697,12 +720,12 @@ D_LoadXMSamples3:
                 Mov     AL, 5
                 StosW
 
-                Mov     EAX, [SI]
+                Mov     AX, [SI]
                 Call    LoadXISample5
-                Mov     EAX, [SI+4]
+                Mov     AX, [SI+4]
                 Call    LoadXISample5
-                Mov     EAX, [SI+4]
-                Add     EAX, [SI+8]
+                Mov     AX, [SI+4]
+                Add     AX, [SI+8]
                 Call    LoadXISample5
 
                                         ; C5speed..
@@ -715,24 +738,54 @@ D_LoadXMSamples3:
                 And     AX, 0FFh
                 ShL     AX, 2
                 Add     DI, AX
-                Mov     ECX, [ES:DI]
+                Mov     CX, [ES:DI]
 
                 Mov     AL, [SI+13]     ; Finetune, -128->+127
                 SAR     AL, 4           ; Finetune = -8->+7
                 And     AX, 0Fh
                 Add     AX, AX
                 Mov     DI, AX
-                MovZX   EAX, [CS:FineTuneTable+DI]
+;;                MovZX   EAX, [CS:FineTuneTable+DI]
+xor ax, ax         ; Zero out the 16-bit AX register (equivalent to zeroing the lower half of EAX)
+mov ax, cs:[DI + FineTuneTable] ; Move the byte from memory into AL, implicitly zero-extending into AX
+
 
                 Pop     DI
                 Pop     ES
 
-                Push    EDX
+;;                 Push    EDX
+;;
+;;                 Mul     ECX
+;;                 ShRD    EAX, EDX, 16
+;;                 Pop     EDX
+;;                 StosD                   ; C5freq
+; Equivalent 16-bit code for an 8086 processor
 
-                Mul     ECX
-                ShRD    EAX, EDX, 16
-                Pop     EDX
-                StosD                   ; C5freq
+; Push EDX -> Push DX, Push AX (assuming EDX:EAX represents the 32-bit value)
+; The low word (DX) is pushed first, then the high word (AX).
+Push    DX
+Push    AX
+
+; Mul ECX -> Mul CX (32-bit multiplication of AX * CX)
+; 8086's MUL CX instruction multiplies AX by CX, storing the 32-bit result in DX:AX.
+; This is the standard 16-bit multiplication that aligns with the 32-bit original.
+Mul     CX
+
+; ShRD EAX, EDX, 16 -> MOV AX, DX (shift right 16 bits)
+; The ShRD instruction shifts EDX:EAX right by 16 bits. This effectively moves
+; the high word (EDX) into the low word (EAX). In the 16-bit world, with the
+; result of MUL in DX:AX, this translates to moving DX to AX.
+Mov     AX, DX
+
+; Pop EDX -> Pop AX, Pop DX (restore original EDX)
+; Restore the original 32-bit EDX value from the stack.
+Pop     DX
+Pop     AX
+
+; StosD -> Stosw (store word)
+; This stores the value in AX to the address in ES:DI.
+Stosw
+
 
                 Xor     AX, AX
                 StosW
@@ -832,7 +885,8 @@ D_LoadXMFinalSamples1:                          ; OK, now load the samples.
                 Jmp     D_LoadXMFinalSamplesPresent
 
 D_LoadXMFinalSamples2:
-                Mov     DWord Ptr [SI+48h], 0
+;;                Mov     DWord Ptr [SI+48h], 0
+                Mov     Word Ptr [SI+48h], 0
 
 D_LoadXMFinalSamplesPresent:
                 Pop     ES

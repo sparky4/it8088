@@ -2,15 +2,6 @@ MAKE Version 3.6  Copyright (c) 1992 Borland International
 
 Available memory 65534464 bytes
 
-	TASM /m /uT310 /jSMART it.asm
-Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
-
-Assembling file:   it.asm
-Error messages:    None
-Warning messages:  None
-Passes:            2
-Remaining memory:  358k
-
 	TASM /m /uT310 /jSMART it_disk.asm
 Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
 
@@ -133,33 +124,37 @@ Assembling file:   it_disk.asm
 *Warning* it_disk.asm(4001) Argument needs type override
 **Error** it_disk.asm(4013) Undefined symbol: EDI
 **Error** it_disk.asm(4021) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(81) Undefined symbol: EAX
-**Error** it_d_rm.inc(95) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(114) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(633) Argument to operation or instruction has illegal size
-**Error** it_d_rm.inc(672) Argument to operation or instruction has illegal size
-**Error** it_d_rm.inc(700) Undefined symbol: EAX
-*Warning* it_d_rm.inc(700) Argument needs type override
-**Error** it_d_rm.inc(702) Undefined symbol: EAX
-*Warning* it_d_rm.inc(702) Argument needs type override
-**Error** it_d_rm.inc(704) Undefined symbol: EAX
-*Warning* it_d_rm.inc(704) Argument needs type override
-**Error** it_d_rm.inc(705) Undefined symbol: EAX
-*Warning* it_d_rm.inc(705) Argument needs type override
-**Error** it_d_rm.inc(718) Undefined symbol: ECX
-*Warning* it_d_rm.inc(718) Argument needs type override
-**Error** it_d_rm.inc(725) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(730) Undefined symbol: EDX
-**Error** it_d_rm.inc(732) Undefined symbol: ECX
-*Warning* it_d_rm.inc(732) Argument needs type override
-**Error** it_d_rm.inc(733) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(734) Undefined symbol: EDX
-**Error** it_d_rm.inc(735) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(835) Too many errors or warnings
+**Error** it_d_rm.inc(1002) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1002) Argument needs type override
+**Error** it_d_rm.inc(1003) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1016) Argument to operation or instruction has illegal size
+**Error** it_d_rm.inc(1022) Undefined symbol: ECX
+*Warning* it_d_rm.inc(1022) Argument needs type override
+**Error** it_d_rm.inc(1023) Undefined symbol: ECX
+*Warning* it_d_rm.inc(1023) Argument needs type override
+**Error** it_d_rm.inc(1024) Undefined symbol: ECX
+*Warning* it_d_rm.inc(1024) Argument needs type override
+**Error** it_d_rm.inc(1052) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1052) Argument needs type override
+**Error** it_d_rm.inc(1053) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1073) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1073) Argument needs type override
+**Error** it_d_rm.inc(1074) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1075) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1075) Argument needs type override
+**Error** it_d_rm.inc(1076) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1425) Undefined symbol: EAX
+**Error** it_d_rm.inc(1429) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1429) Argument needs type override
+**Error** it_d_rm.inc(1430) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1430) Argument needs type override
+**Error** it_d_rm.inc(1431) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1431) Argument needs type override
+**Error** it_d_rm.inc(1432) Too many errors or warnings
 Error messages:    101
-Warning messages:  40
+Warning messages:  44
 Passes:            3
-Remaining memory:  162k
+Remaining memory:  163k
 
 
 ** error 1 ** deleting it_disk.obj
