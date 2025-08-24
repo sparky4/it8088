@@ -124,35 +124,36 @@ Assembling file:   it_disk.asm
 *Warning* it_disk.asm(4001) Argument needs type override
 **Error** it_disk.asm(4013) Undefined symbol: EDI
 **Error** it_disk.asm(4021) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1002) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1002) Argument needs type override
-**Error** it_d_rm.inc(1003) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1016) Argument to operation or instruction has illegal size
-**Error** it_d_rm.inc(1022) Undefined symbol: ECX
-*Warning* it_d_rm.inc(1022) Argument needs type override
-**Error** it_d_rm.inc(1023) Undefined symbol: ECX
-*Warning* it_d_rm.inc(1023) Argument needs type override
-**Error** it_d_rm.inc(1024) Undefined symbol: ECX
-*Warning* it_d_rm.inc(1024) Argument needs type override
-**Error** it_d_rm.inc(1052) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1052) Argument needs type override
-**Error** it_d_rm.inc(1053) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1073) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1073) Argument needs type override
-**Error** it_d_rm.inc(1074) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1075) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1075) Argument needs type override
-**Error** it_d_rm.inc(1076) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1425) Undefined symbol: EAX
-**Error** it_d_rm.inc(1429) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1429) Argument needs type override
-**Error** it_d_rm.inc(1430) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1430) Argument needs type override
-**Error** it_d_rm.inc(1431) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1431) Argument needs type override
-**Error** it_d_rm.inc(1432) Too many errors or warnings
+**Error** it_d_rm.inc(1024) Argument to operation or instruction has illegal size
+**Error** it_d_rm.inc(1030) Undefined symbol: ECX
+*Warning* it_d_rm.inc(1030) Argument needs type override
+**Error** it_d_rm.inc(1031) Undefined symbol: ECX
+*Warning* it_d_rm.inc(1031) Argument needs type override
+**Error** it_d_rm.inc(1032) Undefined symbol: ECX
+*Warning* it_d_rm.inc(1032) Argument needs type override
+**Error** it_d_rm.inc(1060) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1060) Argument needs type override
+**Error** it_d_rm.inc(1061) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1081) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1081) Argument needs type override
+**Error** it_d_rm.inc(1082) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1083) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1083) Argument needs type override
+**Error** it_d_rm.inc(1084) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(1433) Undefined symbol: EAX
+**Error** it_d_rm.inc(1437) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1437) Argument needs type override
+**Error** it_d_rm.inc(1438) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1438) Argument needs type override
+**Error** it_d_rm.inc(1439) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1439) Argument needs type override
+**Error** it_d_rm.inc(1440) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1440) Argument needs type override
+**Error** it_d_rm.inc(1441) Undefined symbol: EAX
+*Warning* it_d_rm.inc(1441) Argument needs type override
+**Error** it_d_rm.inc(1444) Too many errors or warnings
 Error messages:    101
-Warning messages:  44
+Warning messages:  45
 Passes:            3
 Remaining memory:  163k
 

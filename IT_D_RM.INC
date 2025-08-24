@@ -999,8 +999,16 @@ D_LoadMTM1:
                 Xor     SI, SI                  ; DS:SI points to MTM header.
 
 D_LoadMTM2:
-                Mov     EAX, 'SPMI'
-                StosD
+;;                Mov     EAX, 'SPMI'
+;;                StosD
+; Move the 'MI' part (lower 16 bits) into the AX register
+mov ax, 'MI'        ; AX = 494Dh (ASCII for 'I' followed by 'M')
+; Store AX at ES:DI and advance DI by 2
+stosw               ; [ES:DI] <- AX, DI <- DI + 2
+; Move the 'SP' part (upper 16 bits) into the AX register
+mov ax, 'SP'        ; AX = 5053h (ASCII for 'P' followed by 'S')
+; Store AX at ES:DI and advance DI by 2
+stosw               ; [ES:DI] <- AX, DI <- DI + 2
                 Xor     AX, AX
                 Mov     CX, 6
                 Rep     StosW                   ; Clear file name.
