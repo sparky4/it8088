@@ -3,7 +3,7 @@
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
                         Jumps
-                        .386
+                        .8086
 
 include switch.inc
 
@@ -500,14 +500,18 @@ Display_HostChannel27:
                 Add     SP, 10
 
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+XOR BH, BH        ; Clear the upper byte of BX (BH) to zero
+MOV BL, [CS:BP+2] ; Move the byte from memory into the lower byte of BX (BL)
                 Cmp     DX, BX
                 JAE     Display_HostChannel1
 
                 Mov     BX, DX
 
 Display_HostChannel1:
-                LEA     CX, [EDX+3]
+;;                LEA     CX, [DX+3]
+MOV CX, DX
+ADD CX, 3
                 Sub     CX, [CS:BP+4]
                 Cmp     BX, CX
                 JGE     Display_HostChannel2
@@ -557,7 +561,9 @@ Display_HostChannel5:                           ; Show vol and sample.
 
                 Push    DI
 
-                MovZX   AX, Byte Ptr [BX+36h]
+;;                MovZX   AX, Byte Ptr [BX+36h]
+XOR AX, AX         ; Zero out the entire AX register
+MOV AL, [BX+36h]   ; Move the byte from memory into AL
                 Inc     AX
                 Mov     DH, 10
                 Div     DH
@@ -577,7 +583,9 @@ SampleNumRange1:
                 Call    Music_GetInstrumentMode
                 JZ      Display_HostChannel23
 
-                MovZX   AX, Byte Ptr [BX+33h]             ; Instrument number
+;;                MovZX   AX, Byte Ptr [BX+33h]             ; Instrument number
+MOV AL, [BX+33h]  ; Move the byte from memory into the low 8 bits of AX (AL).
+XOR AH, AH        ; XOR AH with itself to set the high 8 bits of AX (AH) to zero.
                 Cmp     AL, 0FFh
                 JE      Display_HostChannel23
 
@@ -608,7 +616,9 @@ Display_HostChannel31:
 
 Display_HostChannel7:
                 StosW
-                MovZX   AX, Byte Ptr [BX+36h]
+;;                MovZX   AX, Byte Ptr [BX+36h]
+MOV AL, Byte Ptr [BX+36h] ; Move the byte from memory into AL
+XOR AH, AH                ; Zero out the AH register
                 Add     AX, AX
                 Mov     SI, AX
                 Mov     DX, [BX+30h]
@@ -627,7 +637,10 @@ Display_HostChannel7:
                 Cmp     CS:Instrument, 0
                 JE      Display_HostChannel8
 
-                LEA     SI, [EDX+20h]
+;;                LEA     SI, [DX+20h]
+MOV SI, DX
+ADD SI, 20h
+
 
 Display_HostChannel8:
                 LodsB
@@ -655,7 +668,9 @@ AvoidMouse1:
 
                 Add     DI, 33*2
                                                 ; Show panning.
-                MovZX   AX, Byte Ptr [BX+25h]
+;;                MovZX   AX, Byte Ptr [BX+25h]
+XOR AX, AX            ; Zero out the entire AX register
+MOV AL, [BX+25h]      ; Move the byte value into the lower-order AL register
 ;                Mov     AL, [DS:SI+2Eh]
                 Cmp     AL, 100
                 JE      Display_HostChannel25
@@ -720,19 +735,19 @@ Display_HostChannel24:
 ;                Test    Byte Ptr [BX+1], 8
 ;                JNZ     Display_HostChannel18   ; Don't display volume
 
-                Mov     EDX, [BX+2Ch]            ; Initial offset.
-                Mov     ECX, [BX+4Ch]            ; Final offset
+                Mov     DX, [BX+2Ch]            ; Initial offset.
+                Mov     CX, [BX+4Ch]            ; Final offset
 
-                And     EDX, EDX
+                And     DX, DX
                 JNS     Display_HostChannelPP1
 
-                Xor     EDX, EDX
+                Xor     DX, DX
 
 Display_HostChannelPP1:
-                And     ECX, ECX
+                And     CX, CX
                 JNS     Display_HostChannelPP2
 
-                Xor     ECX, ECX
+                Xor     CX, CX
 
 Display_HostChannelPP2:
                 Cmp     Byte Ptr [BX+0Ah], 8
@@ -744,8 +759,8 @@ Comment ~
                 Cmp     AL, 2
                 JB      NoSampleLoop
 
-                Mov     ECX, [BX+40h]
-                Mov     EDX, [BX+44h]
+                Mov     CX, [BX+40h]
+                Mov     DX, [BX+44h]
                 Jmp     Display_HostChannel20
 
 NoSampleLoop:
@@ -754,18 +769,18 @@ NoSampleLoop:
                 JE      Display_HostChannel19   ; Normal loop
 
                                                 ; Ping pong!
-                Cmp     ECX, EDX
+                Cmp     CX, DX
                 JA      Display_HostChannel9
-                XChg    ECX, EDX
+                XChg    CX, DX
                 Jmp     Display_HostChannel9
 
 Display_HostChannel19:                          ; Forwards loop!
-                Cmp     ECX, EDX
+                Cmp     CX, DX
                 JAE     Display_HostChannel9
-                Mov     ECX, [BX+44h]
+                Mov     CX, [BX+44h]
 
 Display_HostChannel9:
-                Sub     ECX, EDX
+                Sub     CX, DX
                 JBE     Display_HostChannel18
 
 Display_HostChannel20:
@@ -773,18 +788,21 @@ Display_HostChannel20:
                 PushF
                 JZ      Display_HCNoDouble
 
-                Add     ECX, ECX
-                Add     EDX, EDX
+                Add     CX, CX
+                Add     DX, DX
 
 Display_HCNoDouble:
-                MovZX   AX, Byte Ptr [BX+36h]
+;;                MovZX   AX, Byte Ptr [BX+36h]
+XOR AH, AH         ; Zero out the high byte of AX (AH)
+MOV AL, [BX+36h]   ; Move the byte from memory into the low byte of AX (AL)
+
                 Inc     AX
 
-                Push    ECX
+                Push    CX
                 Xor     CX, CX
                 Call    Music_GetSampleLocation
-                Pop     ECX
-                Add     ESI, EDX
+                Pop     CX
+                Add     SI, DX
 
                 PopF
                 Push    BX
@@ -792,9 +810,9 @@ Display_HCNoDouble:
                 JZ      Display_HostChannel8Bit
 
                 Xor     DX, DX
-                ShR     ECX, 1
+                ShR     CX, 1
                 JZ      Display_HostChannelError
-                Or      ESI, 1
+                Or      SI, 1
                 Inc     BX
 
 Display_HostChannel8Bit:
@@ -833,7 +851,7 @@ Display_HostChannel12:
                 Jmp     Display_HostChannel14
 
 Display_HostChannelNewSegment:
-                Add     ESI, 10000h
+                Add     SI, 65535       ;10000
                 Int     3
                 Jmp     Display_HostChannelResume
 
@@ -919,17 +937,17 @@ EndP            Display_HostChannel
 Proc            Draw10Num
 
                 Mov     CX, 10
-                Mov     EBP, 10
+                Mov     BP, 10
 
 Draw10Num1:
-                Xor     EDX, EDX
-                Div     EBP
+                Xor     DX, DX
+                Div     BP
 
                 Add     DX, '0'+2*256
                 Sub     DI, 2
                 Mov     [ES:DI], DX
 
-                And     EAX, EAX
+                And     AX, AX
 
                 LoopNZ  Draw10Num1
 
@@ -1045,14 +1063,20 @@ Display_Details27:
                 Add     SP, 10
 
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+; Read the byte into a low-order register
+MOV BL, [CS:BP+2]
+; Zero-out the high-order byte of the destination register
+MOV BH, 0
                 Cmp     DX, BX
                 JAE     Display_Details1
 
                 Mov     BX, DX
 
 Display_Details1:
-                LEA     CX, [EDX+4]
+;;                LEA     CX, [DX+4]
+MOV CX, DX    ; Copy array base address to CX
+ADD CX, 4     ; Add the offset to find the new address
                 Sub     CX, [CS:BP+4]
                 Cmp     BX, CX
                 JGE     Display_Details2
@@ -1167,11 +1191,11 @@ Display_Details5:                           ; Show vol and sample.
 
 Display_Details6:
                 Mov     BX, [SI+24h]    ; DS:BX points to virtual channel.
-                Mov     EAX, [BX+10h]
+                Mov     AX, [BX+10h]
                 Call    Draw10Num
 
                 Add     DI, 42
-                Mov     EAX, [BX+4Ch]
+                Mov     AX, [BX+4Ch]
                 Call    Draw10Num
 
                 Add     DI, 22
@@ -1566,7 +1590,11 @@ GetBeforeRows2:
 
                 Call    Music_GetSongSegment
                 Mov     ES, AX
-                MovZX   AX, Byte Ptr [ES:BX+100h-1]
+;;                MovZX   AX, Byte Ptr [ES:BX+100h-1]
+; Clear the high-order byte of AX (AH)
+MOV AH, 00h
+; Move the byte from the source address into the low-order byte of AX (AL)
+MOV AL, [ES:BX+100h-1]
                 Cmp     AL, 199
                 JBE     GetBeforeRows4
 
@@ -1667,7 +1695,9 @@ GetAfterRows2:
 
                 Call    Music_GetSongSegment
                 Mov     ES, AX
-                MovZX   AX, Byte Ptr [ES:BX+101h]
+;;                MovZX   AX, Byte Ptr [ES:BX+101h]
+XOR AH, AH                ; Clear the AH (high) byte of the AX register
+MOV AL, [ES:BX+101h]      ; Move the byte from memory into the AL (low) byte
                 Cmp     AL, 199
                 JBE     GetAfterRows4
 
@@ -1960,7 +1990,11 @@ Show5Channel2:                                  ; Show note.
                                                 ; AL = octave
                                                 ; AH = note.
                 Mov     DX, AX
-                MovZX   BX, AL
+;;                MovZX   BX, AL
+; Clear the entire 16-bit BX register.
+xor bx, bx
+; Move the 8-bit value from AL into the lower half of BX (BL).
+mov bl, al
                 Add     BX, BX
                 Mov     AH, 6
                 Mov     AL, [CS:BX+NoteTable]
@@ -2110,7 +2144,9 @@ Proc            Display_5Channel
                                                 ; Fill in text.
                                                 ; check boundaries.
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+XOR BH, BH         ; Clear the high byte of BX (BH)
+MOV BL, [CS:BP+2]  ; Move the byte from memory into the low byte of BX (BL)
                 Cmp     DX, BX
                 JAE     Display_5Channel2
 
@@ -2140,7 +2176,9 @@ Display_5Channel11:
                 Mov     SI, Offset Channel5Msg
 
 Display_5Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+XOR AH, AH    ; Zero out the high byte of AX
+MOV AL, BL    ; Move BL into the low byte of AX
                 Inc     AX
                 Div     CH
                 Add     AX, 3030h
@@ -2206,7 +2244,9 @@ Show8Channel2:                                  ; Show note.
                 AAM     12
 
                 Mov     DX, AX
-                MovZX   BX, AL
+;;                MovZX   BX, AL
+XOR BX, BX    ; Clear the entire 16-bit BX register by XORing it with itself
+MOV BL, AL    ; Move the 8-bit AL into the lower 8 bits of BX (BL)
                 Add     BX, BX
                 Mov     AH, 6
                 Mov     AL, [CS:BX+NoteTable]
@@ -2326,7 +2366,9 @@ Proc            Display_8Channel
                                                 ; Fill in text.
                                                 ; check boundaries.
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+MOV BL, [CS:BP+2]  ; Move the byte from the source address into the low byte of BX.
+MOV BH, 0          ; Zero out the high byte of BX.
                 Cmp     DX, BX
                 JAE     Display_8Channel2
 
@@ -2356,7 +2398,9 @@ Display_8Channel11:
                 Mov     SI, Offset Channel8Msg
 
 Display_8Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+XOR AH, AH   ; Zero out the high byte of AX
+MOV AL, BL   ; Move BL into the low byte of AX
                 Inc     AX
                 Div     CH
                 Add     AX, 3030h
@@ -2423,7 +2467,9 @@ Show10Channel2:                                  ; Show note.
                                                 ; AL = octave
                                                 ; AH = note.
                 Mov     DX, AX
-                MovZX   BX, AL
+;;                MovZX   BX, AL
+XOR BX, BX  ; Clear the entire BX register to all zeros
+MOV BL, AL  ; Move the 8-bit value from AL to the lower half of BX
                 Add     BX, BX
                 Mov     AH, 6
                 Mov     AL, [CS:BX+NoteTable]
@@ -2562,7 +2608,9 @@ Proc            Display_10Channel
                                                 ; Fill in text.
                                                 ; check boundaries.
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+MOV BL, [CS:BP+2]
+MOV BH, 0
                 Cmp     DX, BX
                 JAE     Display_10Channel2
 
@@ -2592,7 +2640,9 @@ Display_10Channel11:
                 Mov     SI, Offset Channel8Msg
 
 Display_10Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+xor ah, ah     ; Clear the high byte of AX (AH)
+mov al, bl     ; Move BL into the low byte of AX (AL)
                 Inc     AX
                 Div     CH
                 Add     AX, 3030h
@@ -2655,7 +2705,9 @@ Show18Channel2:
                 AAM     12
 
                 Mov     DX, AX
-                MovZX   BX, AL
+;;                MovZX   BX, AL
+xor bx, bx    ; Zero out the entire 16-bit BX register.
+mov bl, al    ; Move the 8-bit value from AL into the lower half of BX.
                 Add     BX, BX
                 Mov     AH, 6
                 Mov     AL, [CS:BX+NoteTable]
@@ -2669,7 +2721,9 @@ Show18Channel2:
                 Jmp     Show18Channel7
 
 Show18Channel3:
-                MovZX   AX, AH
+;;                MovZX   AX, AH
+MOV AX, 0  ; Clear the entire 16-bit AX register
+MOV AL, AH ; Copy the 8-bit value from AH to AL
                 Div     CH
                 Add     AX, 3030h
                 Mov     DL, AH
@@ -2817,7 +2871,11 @@ Proc            Display_18Channel
                                                 ; Fill in text.
                                                 ; check boundaries.
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+; Clear the upper byte of the destination register BX
+MOV BH, 0
+; Move the source byte into the lower byte of the destination register
+MOV BL, Byte Ptr [CS:BP+2]
                 Cmp     DX, BX
                 JAE     Display_18Channel2
 
@@ -2847,7 +2905,9 @@ Display_18Channel11:
                 Mov     SI, Offset Channel18Msg
 
 Display_18Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+MOV AH, 00h ; Clear the high byte of AX
+MOV AL, BL  ; Copy the value from BL to the low byte of AX
                 Inc     AX
                 Div     CH
                 Add     AX, 3030h
@@ -2916,7 +2976,9 @@ Proc            Display_24Channel
                                                 ; Fill in text.
                                                 ; check boundaries.
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+MOV BL, Byte Ptr [CS:BP+2] ; Copy the 8-bit value into the low byte of BX
+MOV BH, 0                  ; Zero out the high byte of BX
                 Cmp     DX, BX
                 JAE     Display_24Channel2
 
@@ -2946,7 +3008,9 @@ Display_24Channel11:
                 Mov     SI, Offset Channel18Msg
 
 Display_24Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+xor ah, ah     ; Zero out the high byte of AX (AH)
+mov al, bl     ; Move the low byte (BL) into the low byte of AX (AL)
                 Inc     AX
                 Div     CH
                 Add     AX, 3030h
@@ -3030,7 +3094,9 @@ Show36Channel2:
                 Jmp     Show36Channel7
 
 Show36Channel3:
-                MovZX   AX, AH
+;;                MovZX   AX, AH
+MOV AL, AH    ; Move the value from AH into AL.
+MOV AH, 0     ; Clear the AH register (zero-extend).
                 Div     CH
                 Add     AX, 3030h
                 Mov     DL, AH
@@ -3144,7 +3210,9 @@ Proc            Display_36Channel
                                                 ; Fill in text.
                                                 ; check boundaries.
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+MOV BL, [CS:BP+2]  ; Move the byte from memory into the lower half of BX.
+MOV BH, 0          ; Clear the higher half of BX to zero.
                 Cmp     DX, BX
                 JAE     Display_36Channel2
 
@@ -3174,7 +3242,9 @@ Display_36Channel11:
                 Mov     SI, Offset Channel18Msg
 
 Display_36Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+MOV AH, 00h    ; Clear the upper 8 bits of AX
+MOV AL, BL     ; Copy BL into the lower 8 bits of AX
                 Inc     AX
                 Div     CH
                 Add     AX, 3030h
@@ -3270,7 +3340,7 @@ Show64Channel4:
                 AAM
                 ShL     AH, 4
                 Or      AL, AH
-                             
+
                 Mov     AH, 12
                 Test    DL, 80h
                 JZ      Show64ChannelVolumePan
@@ -3328,7 +3398,9 @@ Proc            Display_64Channel
                 Mov     DL, Byte Ptr CurrentChannel
 
 Display_64Channel4:
-                MovZX   AX, BL
+;;                MovZX   AX, BL
+MOV AH, 00h    ; Clear the upper 8 bits of AX
+MOV AL, BL     ; Copy BL into the lower 8 bits of AX
                 Inc     AX
                 Div     CH
 
@@ -3444,14 +3516,18 @@ Proc            Display_NoteDots                        ; Draw boxes first.
                 Add     SP, 10
 
                 Mov     DX, CurrentChannel
-                MovZX   BX, Byte Ptr [CS:BP+2]
+;;                MovZX   BX, Byte Ptr [CS:BP+2]
+MOV BL, Byte Ptr [CS:BP+2]  ; Move the byte into the low byte of BX.
+MOV BH, 0                   ; Zero out the high byte of BX.
                 Cmp     DX, BX
                 JAE     Display_Dots1
 
                 Mov     BX, DX
 
 Display_Dots1:
-                LEA     CX, [EDX+3]
+;;                LEA     CX, [DX+3]
+MOV CX, DX  ; Copy the value of DX into CX
+ADD CX, 3   ; Add 3 to CX
                 Sub     CX, [CS:BP+4]
                 Cmp     BX, CX
                 JGE     Display_Dots2
@@ -3509,7 +3585,14 @@ Display_Dots5:
                 Cmp     AL, 73
                 JAE     Display_Dots6
 
-                LEA     DI, [DataArray+EAX+EAX]
+;;                LEA     DI, [DataArray+AX+AX]
+; Assuming AX contains the array index.
+; This code computes DI = offset(DataArray) + (AX * 2)
+
+MOV BX, AX      ; Copy AX to a temporary register, BX.
+ADD BX, AX      ; Add AX to BX, which is now AX*2.
+MOV DI, BX      ; Copy the calculated index (BX) to DI.
+ADD DI, OFFSET DataArray ; Add the base address of the array to DI.
                 Mov     AL, [SI+20h]
                 Mov     AH, [SI+36h]
                 Cmp     AH, 100
@@ -3595,7 +3678,7 @@ Proc            Display_SampleDots          ; Draw boxes first.
                 Mov     BX, DX
 
 Display_SampleDots1:
-                LEA     CX, [EDX+3]
+                LEA     CX, [DX+3]
                 Sub     CX, [CS:BP+4]
                 Cmp     BX, CX
                 JGE     Display_SampleDots2
@@ -3667,7 +3750,7 @@ Display_SampleDots5:
                 Cmp     AL, 73
                 JAE     Display_SampleDots6
 
-                LEA     DI, [DataArray+EAX+EAX]
+                LEA     DI, [DataArray+AX+AX]
                 Mov     AL, [SI+20h]    ; Volume
                 Mov     AH, [SI+33h]    ; Instrument
 
@@ -3934,7 +4017,7 @@ DisplayInsert2:
                 JNZ     DisplayInsert2
 
                 Pop     SI                              ; SI points to cur win
-                                                        ; now to resize..
+                                                        ; now to rSIze..
                 Mov     AX, [SI+4]                      ; AX = length of win
                 ShR     AX, 1
                 AdC     AX, 0
@@ -4227,8 +4310,8 @@ EndP            DisplaySoloChannel
 
 ;ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
 
-OldEBX          DD      0
-OldECX          DD      0
+OldBX          DW      0
+OldCX          DW      0
 
 Proc            DisplayUpdateScreen Far
 
@@ -4245,22 +4328,22 @@ ENDIF
                 Test    AX, AX
                 JZ      DisplayUpdateScreen3    ; Play mode 0 - update screen
 
-                Cmp     CS:OldEBX, EBX
+                Cmp     CS:OldBX, BX
                 JNE     DisplayUpdateScreen2
 
-                Cmp     CS:OldECX, ECX
+                Cmp     CS:OldCX, CX
                 JNE     DisplayUpdateScreen2
 
                 Xor     AX, AX
                 Ret
 
 DisplayUpdateScreen3:
-                Mov     EBX, -1
-                Mov     ECX, EBX
+                Mov     BX, -1
+                Mov     CX, BX
 
 DisplayUpdateScreen2:
-                Mov     CS:OldEBX, EBX
-                Mov     CS:OldECX, ECX
+                Mov     CS:OldBX, BX
+                Mov     CS:OldCX, CX
 
 DisplayUpdateScreen1:
                 Mov     AX, 1
@@ -4428,7 +4511,20 @@ Display_FullScreen1:
                 JZ      Display_FullScreen2
 
                 Mov     Byte Ptr [DisplayWindows+3], 1
-                Mov     DWord Ptr [DisplayWindows+4], 160*10000h+49
+;;                Mov     DWord Ptr [DisplayWindows+4], 160*10000h+49
+; Move the lower 16 bits (0049h) to the first word of the 32-bit location.
+mov word ptr [DisplayWindows+4], 0049h
+; Move the upper 16 bits (00A0h) to the second word of the 32-bit location.
+mov word ptr [DisplayWindows+6], 00A0h
+
+;;; Move the lower 16 bits (0031h) to the starting address.
+;;mov ax, 0031h
+;;mov [DisplayWindows+4], ax
+
+;;; Move the upper 16 bits (00A0h) to the next word address.
+;;mov ax, 00A0h
+;;mov [DisplayWindows+6], ax
+
 
 Display_FullScreen3:
                 Push    Glbl
@@ -4446,7 +4542,20 @@ Display_FullScreen3:
 
 Display_FullScreen2:
                 Mov     Byte Ptr [DisplayWindows+3], 12
-                Mov     DWord Ptr [DisplayWindows+4], 12*80*2*65536+38
+;;                Mov     DWord Ptr [DisplayWindows+4], 12*80*2*65536+38
+; Move the low word (0x0026) to the lower 16 bits of the destination address.
+MOV WORD PTR [DisplayWindows+4], 0026h
+; Move the high word (0x077D) to the higher 16 bits of the destination address.
+; The high word is stored at an offset of +2 from the low word.
+MOV WORD PTR [DisplayWindows+6], 077Dh
+;;; Move the low word of the constant into a register and then to memory
+;;mov ax, 0026h           ; Load the low 16 bits of the constant into AX
+;;mov word ptr [DisplayWindows+4], ax ; Store AX into the first half of the DWORD
+
+;;; Move the high word of the constant into a register and then to memory
+;;mov ax, 0780h           ; Load the high 16 bits of the constant into AX
+;;mov word ptr [DisplayWindows+6], ax ; Store AX into the second half of the DWORD
+
 
 Display_FullScreen4:
                 Push    Glbl

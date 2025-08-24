@@ -3,7 +3,7 @@
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
                         Jumps
-                        .386
+                        .8086
 
 include switch.inc
 include network.inc
@@ -467,9 +467,9 @@ Set5NumValues           Label   Word
 
 HeaderMsg1              Label   Byte
 IF SHOWVERSION
-                        DB      0FFh, 9, ' ', "Impulse Tracker v2.14 Copyright (C) 1995-2000 Jeffrey Lim", 13
+                        DB      0FFh, 9, ' ', "Impulse Tracker XT v2.14 Copyright (C) 1995-2000 Jeffrey Lim", 13
 ELSE
-                        DB      0FFh, 12, ' ', "Impulse Tracker Copyright (C) 1995-2000 Jeffrey Lim", 13
+                        DB      0FFh, 12, ' ', "Impulse Tracker XT Copyright (C) 1995-2000 Jeffrey Lim", 13
 ENDIF
                         DB      0FFh, 9, ' ', 0FEh, 21h, 139, 0FFh, 25, 134, 138, 0FFh, 11, ' ', 139, 0FFh, 28, 134, 138, 13
                         DB      0FEh, 20h, "Song Name", 0FEh, 21h, 132, 0FEh, 5, 0FFh, 25, ' ', 0FEh, 23h, 131, 0FEh, 20h, 0

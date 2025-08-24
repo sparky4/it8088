@@ -1,6 +1,6 @@
 
         Jumps
-        .386
+        .8086
 
 include switch.inc
 

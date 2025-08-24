@@ -3,7 +3,7 @@
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
                         Jumps
-                        .386
+                        .8086
 
 include switch.inc
 
@@ -72,7 +72,17 @@ UnknownError    DB      "Unknown critical error", 0
 
 Proc            ErrorHandler Far
 
-                PushA
+;;                PushA
+; The PUSHA equivalent for the 8086 processor
+push ax
+push cx
+push dx
+push bx
+push sp
+push bp
+push si
+push di
+
                 Push    DS
                 Push    ES
 
@@ -109,7 +119,17 @@ ErrorHandler3:
 ErrorHandler4:
                 Pop     ES
                 Pop     DS
-                PopA
+;;                PopA
+; Equivalent of POPA for 8086
+POP DI
+POP SI
+POP BP
+ADD SP, 2 ; Discard the pushed SP value by incrementing the stack pointer
+POP BX
+POP DX
+POP CX
+POP AX
+
 
                 Xor     AX, AX
 
@@ -130,11 +150,42 @@ Proc            Error_InitHandler Far
                 Mov     ES, AX
 
                 Mov     AX, CS
-                ShL     EAX, 16
+;;                ShL     EAX, 16
+    MOV DX, AX   ; Move the lower 16 bits (AX) to the upper 16 bits (DX).
+    XOR AX, AX   ; Zero out the lower 16 bits (AX).
                 Mov     AX, Offset ErrorHandler
 
-                XChg    [ES:90h], EAX
-                Mov     DWord Ptr CS:OldHandlerOffset, EAX
+;;                XChg    [ES:90h], EAX
+; Assuming ES is already set correctly
+PUSH AX        ; Save the low word of EAX to the stack
+PUSH DX        ; Use DX as a temporary register
+
+; Load the 32-bit memory value into DX:AX
+MOV AX, WORD PTR ES:[90h]    ; Load the low word
+MOV DX, WORD PTR ES:[92h]    ; Load the high word
+
+; Store the original EAX value (now in DX:AX) into memory
+POP WORD PTR ES:[90h]        ; Store the original low word from stack to memory
+POP WORD PTR ES:[92h]        ; Store the original high word from stack to memory
+
+; The original EAX is now in DX:AX. To return the value, simply use DX:AX
+; The memory location now contains the original value of EAX
+
+;;                Mov     DWord Ptr CS:OldHandlerOffset, EAX
+; Assuming OldHandlerOffset is defined as a DWORD in your 32-bit code,
+; it corresponds to two consecutive words in 8086 assembly.
+; For example:
+; OldHandlerOffset DW ?
+;                  DW ?
+
+; To store the 32-bit value from EAX, perform two 16-bit moves.
+
+; Move the low 16 bits of EAX (which is AX) to the first word
+MOV CS:WORD PTR OldHandlerOffset, AX
+
+; Move the high 16 bits of EAX (from the EDX register after a move or calculation
+; in 32-bit code) to the second word
+MOV CS:WORD PTR OldHandlerOffset + 2, DX
 
                 Pop     ES
                 Ret
@@ -149,8 +200,16 @@ Proc            Error_UnInitHandler Far
                 Xor     AX, AX
                 Mov     ES, AX
 
-                Mov     EAX, DWord Ptr CS:OldHandlerOffset
-                Mov     [ES:90h], EAX
+;;                Mov     EAX, DWord Ptr CS:OldHandlerOffset
+;;                Mov     [ES:90h], EAX
+; Read the 32-bit pointer into a 16-bit register pair (e.g., DX:AX)
+MOV AX, WORD PTR CS:OldHandlerOffset        ; Get the offset (lower 16 bits)
+MOV DX, WORD PTR CS:[OldHandlerOffset + 2]  ; Get the segment (higher 16 bits)
+
+; Write the 32-bit pointer from the register pair to the destination
+MOV WORD PTR ES:[90h], AX                   ; Store the offset
+MOV WORD PTR ES:[92h], DX                   ; Store the segment
+
 
                 Pop     ES
                 Ret

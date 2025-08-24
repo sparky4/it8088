@@ -1,0 +1,122 @@
+MAKE Version 3.6  Copyright (c) 1992 Borland International
+
+Available memory 65534464 bytes
+
+	TASM /m /uT310 /jSMART it_f.asm
+Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
+
+Assembling file:   it_f.asm
+**Error** it_f.asm(747) Illegal instruction for currently selected processor(s)
+**Error** it_f.asm(758) Undefined symbol: EAX
+**Error** it_f.asm(763) Undefined symbol: EAX
+**Error** it_f.asm(1318) Illegal instruction for currently selected processor(s)
+**Error** it_f.asm(1690) Undefined symbol: EDI
+**Error** it_f.asm(1805) Undefined symbol: EDI
+**Error** it_f.asm(1928) Undefined symbol: EDI
+**Error** it_f.asm(2034) Undefined symbol: EDI
+**Error** it_f.asm(3256) Undefined symbol: EAX
+**Error** it_f.asm(3364) Undefined symbol: EAX
+**Error** it_f.asm(3474) Undefined symbol: EAX
+*Warning* it_f.asm(3474) Argument needs type override
+**Error** it_f.asm(3475) Undefined symbol: EAX
+*Warning* it_f.asm(3475) Argument needs type override
+**Error** it_f.asm(3478) Undefined symbol: EAX
+*Warning* it_f.asm(3478) Argument needs type override
+**Error** it_f.asm(3479) Undefined symbol: EAX
+*Warning* it_f.asm(3479) Argument needs type override
+**Error** it_f.asm(3482) Undefined symbol: EAX
+*Warning* it_f.asm(3482) Argument needs type override
+**Error** it_f.asm(3485) Undefined symbol: EAX
+*Warning* it_f.asm(3485) Argument needs type override
+**Error** it_f.asm(3486) Undefined symbol: EAX
+*Warning* it_f.asm(3486) Argument needs type override
+**Error** it_f.asm(3490) Undefined symbol: EAX
+*Warning* it_f.asm(3490) Argument needs type override
+**Error** it_f.asm(3491) Undefined symbol: EAX
+*Warning* it_f.asm(3491) Argument needs type override
+**Error** it_f.asm(3494) Undefined symbol: EAX
+*Warning* it_f.asm(3494) Argument needs type override
+**Error** it_f.asm(3495) Undefined symbol: EAX
+*Warning* it_f.asm(3495) Argument needs type override
+**Error** it_f.asm(3498) Undefined symbol: EAX
+*Warning* it_f.asm(3498) Argument needs type override
+**Error** it_f.asm(3501) Undefined symbol: EAX
+*Warning* it_f.asm(3501) Argument needs type override
+**Error** it_f.asm(3502) Undefined symbol: EAX
+*Warning* it_f.asm(3502) Argument needs type override
+**Error** it_f.asm(3592) Undefined symbol: EAX
+*Warning* it_f.asm(3592) Argument needs type override
+**Error** it_f.asm(3593) Undefined symbol: EAX
+*Warning* it_f.asm(3593) Argument needs type override
+**Error** it_f.asm(3596) Undefined symbol: EAX
+*Warning* it_f.asm(3596) Argument needs type override
+**Error** it_f.asm(3597) Undefined symbol: EAX
+*Warning* it_f.asm(3597) Argument needs type override
+**Error** it_f.asm(3600) Undefined symbol: EAX
+*Warning* it_f.asm(3600) Argument needs type override
+**Error** it_f.asm(3603) Undefined symbol: EAX
+*Warning* it_f.asm(3603) Argument needs type override
+**Error** it_f.asm(3604) Undefined symbol: EAX
+*Warning* it_f.asm(3604) Argument needs type override
+**Error** it_f.asm(3608) Undefined symbol: EAX
+*Warning* it_f.asm(3608) Argument needs type override
+**Error** it_f.asm(3609) Undefined symbol: EAX
+*Warning* it_f.asm(3609) Argument needs type override
+**Error** it_f.asm(3612) Undefined symbol: EAX
+*Warning* it_f.asm(3612) Argument needs type override
+**Error** it_f.asm(3613) Undefined symbol: EAX
+*Warning* it_f.asm(3613) Argument needs type override
+**Error** it_f.asm(3616) Undefined symbol: EAX
+*Warning* it_f.asm(3616) Argument needs type override
+**Error** it_f.asm(3619) Undefined symbol: EAX
+*Warning* it_f.asm(3619) Argument needs type override
+**Error** it_f.asm(3620) Undefined symbol: EAX
+*Warning* it_f.asm(3620) Argument needs type override
+**Error** it_f.asm(3935) Undefined symbol: EAX
+*Warning* it_f.asm(3935) Argument needs type override
+**Error** it_f.asm(3952) Undefined symbol: EAX
+*Warning* it_f.asm(3952) Argument needs type override
+**Error** it_f.asm(3969) Undefined symbol: EAX
+*Warning* it_f.asm(3969) Argument needs type override
+**Error** it_f.asm(3986) Undefined symbol: EAX
+*Warning* it_f.asm(3986) Argument needs type override
+**Error** it_f.asm(4006) Undefined symbol: EAX
+*Warning* it_f.asm(4006) Argument needs type override
+**Error** it_f.asm(4022) Undefined symbol: EAX
+*Warning* it_f.asm(4022) Argument needs type override
+**Error** it_f.asm(4313) Undefined symbol: EAX
+**Error** it_f.asm(4314) Undefined symbol: EBX
+**Error** it_f.asm(4316) Undefined symbol: EDX
+**Error** it_f.asm(4318) Undefined symbol: EBX
+*Warning* it_f.asm(4318) Argument needs type override
+**Error** it_f.asm(4322) Undefined symbol: EDX
+*Warning* it_f.asm(4322) Argument needs type override
+**Error** it_f.asm(4323) Undefined symbol: EBX
+*Warning* it_f.asm(4323) Argument needs type override
+**Error** it_f.asm(4339) Undefined symbol: EDX
+**Error** it_f.asm(4341) Undefined symbol: EBX
+**Error** it_f.asm(4342) Undefined symbol: EAX
+**Error** it_f.asm(4494) Undefined symbol: EAX
+*Warning* it_f.asm(4494) Argument needs type override
+**Error** it_f.asm(4507) Undefined symbol: EAX
+*Warning* it_f.asm(4507) Argument needs type override
+**Error** it_f.asm(4538) Undefined symbol: EBX
+*Warning* it_f.asm(4538) Argument needs type override
+**Error** it_f.asm(4542) Undefined symbol: EDX
+*Warning* it_f.asm(4542) Argument needs type override
+**Error** it_f.asm(4543) Undefined symbol: EBX
+*Warning* it_f.asm(4543) Argument needs type override
+**Error** it_f.asm(4555) Undefined symbol: EAX
+*Warning* it_f.asm(4555) Argument needs type override
+**Error** it_f.asm(4560) Undefined symbol: EAX
+*Warning* it_f.asm(4560) Argument needs type override
+**Error** it_f.asm(4561) Illegal instruction for currently selected processor(s)
+**Error** it_f.asm(4562) Undefined symbol: EAX
+*Warning* it_f.asm(4562) Argument needs type override
+Error messages:    62
+Warning messages:  45
+Passes:            3
+Remaining memory:  314k
+
+
+** error 1 ** deleting it_f.obj

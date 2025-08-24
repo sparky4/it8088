@@ -1,4 +1,4 @@
 tasm /m /ut310 sbprodrv
-tlink /3 sbprodrv
+tlink sbprodrv
 execom sbprodrv itsbpro.drv
 copy itsbpro.drv ..

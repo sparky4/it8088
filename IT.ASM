@@ -3,7 +3,7 @@
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
                         Jumps
-                        .386P
+                        .8086
 
 include switch.inc
 
@@ -126,8 +126,8 @@ include debug.inc
 
 StackSize       =       1000h
 
-No386Msg        DB      "Sorry, Impulse Tracker requires a 386+ processor to run."
-                DB      13, 10, "$"
+; No386Msg        DB      "Sorry, Impulse Tracker requires a 386+ processor to run."
+;                 DB      13, 10, "$"
 WindowsMsg      DB      "Microsoft Windows detected.", 13, 10, 10
                 DB      "Due to instabilities in Windows, it is highly recommended that you run", 13, 10
                 DB      "Impulse Tracker in DOS instead.", 13, 10, 10
@@ -314,15 +314,15 @@ Proc            Start
                 JNZ     Found386
 
 No386:
-                Push    CS
-                Pop     DS
-
-                Mov     AH, 9
-                Mov     DX, Offset No386Msg
-                Int     21h
-
-                Mov     AX, 4C02h
-                Int     21h
+;                 Push    CS
+;                 Pop     DS
+;
+;                 Mov     AH, 9
+;                 Mov     DX, Offset No386Msg
+;                 Int     21h
+;
+;                 Mov     AX, 4C02h
+;                 Int     21h
 
 Found386:
 ;                Push    0B800h                          ; DEBUG!!!!!
@@ -790,7 +790,8 @@ NoPause:
                 Mov     [Word Ptr COMSPEC+2], ES
 
 Start2:
-                Mov     FS, [CS:PSP]
+;                Mov     FS, [CS:PSP]
+                Mov     AX, [CS:PSP]
 
                 Trace   "Initialising Screen Module"
 
@@ -920,7 +921,7 @@ GetStartupKeyList1:
                 Mov     [CS:StartupQueueOffset], SI
 
                 Cmp     SI, [CS:StartupQueueEnd]
-                
+
                 Pop     SI
                 JB      GetStartupKeyList1End
 
@@ -1055,7 +1056,15 @@ EndP            Refresh
 
 Proc            DOSShell Far
 
-                PushAD
+;;                PushAD
+PUSH AX
+PUSH CX
+PUSH DX
+PUSH BX
+PUSH SP
+PUSH BP
+PUSH SI
+PUSH DI
                 Push    DS
                 Push    ES
 
@@ -1121,7 +1130,16 @@ DOSShell5:
 
                 Pop     ES
                 Pop     DS
-                PopAD
+;;                PopAD
+POP DI
+POP SI
+POP BP
+ADD SP, 2   ; Discard the stack pointer value
+POP BX
+POP DX
+POP CX
+POP AX
+
 
                 Mov     AX, 1
                 Ret

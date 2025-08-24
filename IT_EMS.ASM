@@ -17,7 +17,7 @@ include switch.inc
 ; Offset 10h    Data
 
                         Jumps
-                        .386
+                        .8086
 
 ;旼컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�
 ;� Externals                                                                   �
@@ -172,12 +172,33 @@ Proc            E_InitEMS Far
 
                 Mov     ES, EMSPageFrame
                 Xor     DI, DI
-                Mov     EAX, 8*16*1024-16
-                StosD                   ; Amount of memory free
-                Xor     EAX, EAX        ; No previous block, no next block
-                StosD
-                Xor     AX, AX          ; Unused block
-                StosW
+;;                 Mov     EAX, 8*16*1024-16
+;;                 StosD                   ; Amount of memory free
+;;                 Xor     EAX, EAX        ; No previous block, no next block
+;;                 StosD
+;;                 Xor     AX, AX          ; Unused block
+;;                 StosW
+; Assuming ES:DI points to the destination memory block.
+; The original constant is 8 * 16 * 1024 - 16, which is 131072 - 16 = 131056 (0x20030).
+; In 16-bit: LOWORD(131056) = 0x0030, HIWORD(131056) = 0x2000.
+Mov     AX, 0030h      ; LOWORD of 131056
+Mov     DX, 2000h      ; HIWORD of 131056
+
+; StosD becomes two StosW instructions.
+StosW                   ; Store LOWORD at ES:DI, DI is incremented by 2
+StosW                   ; Store HIWORD at ES:DI, DI is incremented by 2
+
+; Xor EAX, EAX becomes Xor AX, AX followed by Xor DX, DX
+Xor     AX, AX          ; Set AX to 0 (low part)
+Xor     DX, DX          ; Set DX to 0 (high part)
+
+; StosD becomes two StosW instructions.
+StosW                   ; Store 0 (AX) at ES:DI, DI is incremented by 2
+StosW                   ; Store 0 (DX) at ES:DI, DI is incremented by 2
+
+; Xor AX, AX becomes Xor AX, AX, which is already a 16-bit instruction.
+Xor     AX, AX          ; Set AX to 0
+StosW                   ; Store 0 (AX) at ES:DI, DI is incremented by 2
 
                 Mov     EMSAvailable, 1
 
@@ -306,7 +327,15 @@ EndP            E_ReleaseEMS
 
 Proc            EMSWarning
 
-                PushAD
+;;                PushAD
+    push ax
+    push cx
+    push dx
+    push bx
+    push sp    ; pushes the stack pointer's original value
+    push bp
+    push si
+    push di
                 Push    DS
                 Push    ES
 
@@ -339,7 +368,15 @@ Proc            EMSWarning
 
                 Pop     ES
                 Pop     DS
-                PopAD
+;;                PopAD
+pop di     ; Pop 16-bit DI
+pop si     ; Pop 16-bit SI
+pop bp     ; Pop 16-bit BP
+add sp, 2  ; Skip the SP value on the stack
+pop bx     ; Pop 16-bit BX
+pop dx     ; Pop 16-bit DX
+pop cx     ; Pop 16-bit CX
+pop ax     ; Pop 16-bit AX
 
                 Ret
 
@@ -525,17 +562,17 @@ Proc            E_AllocateBlockEMS Far          ; EAX = number of bytes
                                                 ; successful
 
                 ClI
-                Push    EBX ECX EDX ESI EDI DS ES
+                Push    BX CX DX SI DI DS ES
 
                 Cmp     CS:EMSAvailable, 0
                 JE      AllocateBlockQuitError
 
-                Mov     ESI, EAX
-                Add     ESI, 0Fh
-                And     ESI, Not 0Fh
+                Mov     SI, AX
+                Add     SI, 0Fh
+                And     SI, Not 0Fh
 
                 Mov     DS, CS:EMSPageFrame
-                Xor     EDI, EDI        ; EDI = current offset
+                Xor     DI, DI        ; DI = current offset
 
                 Mov     CX, 0008h       ; Starting page = 0, Max page = 8
 
@@ -547,7 +584,7 @@ AllocateBlockEMS1:
                 Cmp     Byte Ptr [DI+8], 0      ; Used?
                 JNE     AllocateBlockEMSNext
 
-                Cmp     ESI, [DI]
+                Cmp     SI, [DI]
                 JA      AllocateBlockEMSNext
 
                 Mov     AX, DI
@@ -558,32 +595,35 @@ AllocateBlockEMS1:
 ; OK. this block will do
                 Mov     Byte Ptr [DI+8], 1      ; This block used
 
-                Mov     EBX, [DI]               ; Size of block
-                Mov     [DI], ESI               ; New size of this block
+                Mov     BX, [DI]               ; Size of block
+                Mov     [DI], SI               ; New size of this block
 
-                Mov     EAX, [DI+4]             ; To get next in HEAX
-                Mov     ECX, EDI                ; ECX = Current offset
-                ShR     ECX, 4                  ; ECX = Segment reference
+                Mov     AX, [DI+4]             ; To get next in HEAX
+                Mov     CX, DI                ; ECX = Current offset
+                ShR     CX, 4                  ; ECX = Segment reference
                 Mov     AX, CX                  ; AX = segment, HEAX = next seg
 
-                Sub     EBX, ESI                ; Bytes in next block
+                Sub     BX, SI                ; Bytes in next block
                 JZ      AllocateBlockPerfectEnd
-                Sub     EBX, 16
+                Sub     BX, 16
 
-                LEA     ESI, [ESI+EDI+16]       ; ESI = position of split block
-                Push    ESI
-                ShR     ESI, 4                  ; SI = segment of split block
+;;                LEA     SI, [SI+DI+16]       ; ESI = position of split block
+MOV  AX, SI      ; Copy SI to a temporary register, AX
+ADD  AX, DI      ; Add DI to the temporary result
+ADD  SI, AX      ; Add the temporary result to SI
+                Push    SI
+                ShR     SI, 4                  ; SI = segment of split block
                 Mov     [DI+6], SI              ; Store pointer to next block
-                Pop     EDI                     ; EDI = position of split block
+                Pop     DI                     ; EDI = position of split block
 
-                Mov     ECX, EDI                ; ECX = position of split block
-                ShR     ECX, 6
+                Mov     CX, DI                ; ECX = position of split block
+                ShR     CX, 6
                 And     CH, Not 3
                 Mov     CL, 8
                 Call    E_MapEMSMemory
 
-                Mov     [DI], EBX               ; bytes in block
-                Mov     [DI+4], EAX             ; Last block & Next block
+                Mov     [DI], BX               ; bytes in block
+                Mov     [DI+4], AX             ; Last block & Next block
                 Mov     Byte Ptr [DI+8], 0      ; Unused block
 
                 Push    AX
@@ -593,7 +633,7 @@ AllocateBlockEMS1:
                 JZ      NoNextBlockSplit
 
                 Call    E_MapAlignedBlockEMS    ; DS:SI Pointing to next
-                ShR     EDI, 4
+                ShR     DI, 4
                 Mov     [SI+4], DI
 
 NoNextBlockSplit:
@@ -609,16 +649,17 @@ AllocateBlockPerfectEnd:
 
 AllocateBlockEMSNext:
                 Mov     CX, [DI+6]              ; Next segment
-                And     ECX, 0FFFFh
+                And     CX, 65535
                 JZ      AllocateBlockQuitError
 
-; Check EDI and ECX for the same frame.. if the same, then skip updating (E)DI
+; Check DI and CX for the same frame.. if the same, then skip updating (E)DI
 ; and only update DI
 
-                ShLD    EAX, EDI, 16    ; AL = 64k frame
-                Mov     EDI, ECX
+;;                ShLD    AX, DI, 16    ; AL = 64k frame
+MOV AX, DI ; Move the value from DI into AX
+                Mov     DI, CX
                 ShR     CH, 4
-                ShL     EDI, 4
+                ShL     DI, 4
 
                 Cmp     AL, CH
                 JE      AllocateBlockEMS1
@@ -631,7 +672,7 @@ AllocateBlockQuitError:
                 StC
 
 AllocateBlockQuit:
-                Pop     ES DS EDI ESI EDX ECX EBX
+                Pop     ES DS DI SI DX CX BX
                 StI
                 Ret
 
@@ -642,7 +683,7 @@ EndP            E_AllocateBlockEMS
 Proc            E_ReleaseBlockEMS Far           ; Given AX = 'segment'.
 
                 ClI
-                Push    EAX EBX DS SI
+                Push    AX BX DS SI
 
                 Mov     BX, AX                  ; BX = current segment
                 Call    E_MapAlignedBlockEMS
@@ -657,18 +698,18 @@ Proc            E_ReleaseBlockEMS Far           ; Given AX = 'segment'.
                 JZ      E_ReleaseBlockEMSNoneAfter      ; Nope, this is the
                                                         ; last block.
                 Call    E_MapAlignedBlockEMS            ; OK, DS:0 points to next block
-                Mov     EAX, [DS:SI+4]                  ; HEAX = next block, AX = last block
-                Mov     EBX, [DS:SI]                    ; Free memory
+                Mov     AX, [DS:SI+4]                  ; HEAX = next block, AX = last block
+                Mov     BX, [DS:SI]                    ; Free memory
                 Cmp     Byte Ptr [DS:SI+8], 0           ; Used?
                 JNE     E_ReleaseBlockAfterEnd
 
                 Call    E_MapAlignedBlockEMS
-                Add     EBX, 16
-                Add     [DS:SI], EBX
+                Add     BX, 16
+                Add     [DS:SI], BX
 
                 Push    AX
                 Mov     AX, [DS:SI+4]
-                Mov     [DS:SI+4], EAX
+                Mov     [DS:SI+4], AX
                 Pop     AX
 
                 Jmp     E_ReleaseBlockEMSBefore
@@ -684,8 +725,8 @@ E_ReleaseBlockEMSBefore:
                 Test    AX, AX
                 JZ      E_ReleaseBlockFinished
 
-                Mov     EAX, [DS:SI+4]
-                Mov     EBX, [DS:SI]
+                Mov     AX, [DS:SI+4]
+                Mov     BX, [DS:SI]
                 Call    E_MapAlignedBlockEMS
 
                 Cmp     Byte Ptr [DS:SI+8], 0
@@ -694,9 +735,9 @@ E_ReleaseBlockEMSBefore:
                 Push    AX
 
                 Mov     AX, [DS:SI+4]           ; Last field
-                Mov     [DS:SI+4], EAX          ; Next field written
-                Add     EBX, 16
-                Add     [DS:SI], EBX
+                Mov     [DS:SI+4], AX          ; Next field written
+                Add     BX, 16
+                Add     [DS:SI], BX
 
                 Pop     AX
                 Jmp     E_ReleaseBlockFinished
@@ -717,7 +758,7 @@ E_ReleaseBlockFinished:
 
 E_ReleaseBlockCleanup:
 
-                Pop     SI DS EBX EAX
+                Pop     SI DS BX AX
                 StI
                 Ret
 
@@ -731,9 +772,9 @@ Proc            E_AllocateEMS Far               ; EAX = number of bytes
                                                 ; given carry = essential
                                                 ;    no carry = spare EMS
 
-                Push    EBX
-                Push    ECX
-                Push    EDX
+                Push    BX
+                Push    CX
+                Push    DX
 
                 Mov     DX, CS:EMSHandlesRemaining
                 JC      E_AllocateEMS3
@@ -748,9 +789,9 @@ E_AllocateEMS3:
                 Cmp     CS:EMSAvailable, 0
                 JE      E_AllocateEMS2
 
-                Mov     EBX, EAX
-                Add     EBX, 16*1024-1
-                SHR     EBX, 14
+                Mov     BX, AX
+                Add     BX, 16*1024-1
+                SHR     BX, 14
 
                 Mov     AH, 43h
                 Int     67h
@@ -766,9 +807,9 @@ E_AllocateEMS2:
 E_AllocateEMS1:
                 Mov     AX, DX
 
-                Pop     EDX
-                Pop     ECX
-                Pop     EBX
+                Pop     DX
+                Pop     CX
+                Pop     BX
                 Ret
 
 EndP            E_AllocateEMS

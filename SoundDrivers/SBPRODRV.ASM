@@ -1,5 +1,5 @@
 
-        .386P
+        .8086
 
 Segment                 DriverHeader PARA Public 'Code' Use16
                         Assume CS:Driver, DS:Nothing
