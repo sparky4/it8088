@@ -967,6 +967,8 @@ LSViewWindowKeys        Label
                         DB      0FFh
 
 
+buffer                  DB      4 dup(?)   ; Define a buffer of 4 bytes
+
 
 ;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 ;³ Functions                                                                   ³

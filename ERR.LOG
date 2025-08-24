@@ -6,156 +6,156 @@ Available memory 65534464 bytes
 Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
 
 Assembling file:   it_disk.asm
-**Error** it_disk.asm(1102) Undefined symbol: FS
-**Error** it_disk.asm(1780) Undefined symbol: EAX
-**Error** it_disk.asm(1798) Undefined symbol: EBX
-**Error** it_disk.asm(2037) Undefined symbol: EAX
-**Error** it_disk.asm(2195) Undefined symbol: EAX
-**Error** it_disk.asm(2344) Undefined symbol: EAX
-**Error** it_disk.asm(2377) Value out of range
-**Error** it_disk.asm(2380) Value out of range
-**Error** it_disk.asm(2516) Undefined symbol: EAX
-**Error** it_disk.asm(2540) Undefined symbol: EDI
-**Error** it_disk.asm(2565) Undefined symbol: EAX
-**Error** it_disk.asm(2596) Undefined symbol: EAX
-**Error** it_disk.asm(2643) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2653) Undefined symbol: EAX
-*Warning* it_disk.asm(2653) Argument needs type override
+**Error** it_disk.asm(1104) Undefined symbol: FS
+**Error** it_disk.asm(1782) Undefined symbol: EAX
+**Error** it_disk.asm(1800) Undefined symbol: EBX
+**Error** it_disk.asm(2039) Undefined symbol: EAX
+**Error** it_disk.asm(2197) Undefined symbol: EAX
+**Error** it_disk.asm(2346) Undefined symbol: EAX
+**Error** it_disk.asm(2379) Value out of range
+**Error** it_disk.asm(2382) Value out of range
+**Error** it_disk.asm(2518) Undefined symbol: EAX
+**Error** it_disk.asm(2542) Undefined symbol: EDI
+**Error** it_disk.asm(2567) Undefined symbol: EAX
+**Error** it_disk.asm(2598) Undefined symbol: EAX
+**Error** it_disk.asm(2645) Illegal instruction for currently selected processor(s)
 **Error** it_disk.asm(2655) Undefined symbol: EAX
 *Warning* it_disk.asm(2655) Argument needs type override
-**Error** it_disk.asm(2668) Undefined symbol: EAX
-*Warning* it_disk.asm(2668) Argument needs type override
-**Error** it_disk.asm(2684) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2688) Undefined symbol: EAX
-*Warning* it_disk.asm(2688) Argument needs type override
-**Error** it_disk.asm(2732) Undefined symbol: EAX
-**Error** it_disk.asm(2751) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2801) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2872) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2874) Undefined symbol: EDX
-*Warning* it_disk.asm(2874) Argument needs type override
-**Error** it_disk.asm(2875) Undefined symbol: EDX
-*Warning* it_disk.asm(2875) Argument needs type override
-**Error** it_disk.asm(2905) Undefined symbol: EDX
-*Warning* it_disk.asm(2905) Argument needs type override
-**Error** it_disk.asm(2914) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2924) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(2929) Undefined symbol: EDX
-*Warning* it_disk.asm(2929) Argument needs type override
-**Error** it_disk.asm(2937) Undefined symbol: EDI
-*Warning* it_disk.asm(2937) Argument needs type override
-**Error** it_disk.asm(2950) Undefined symbol: EDI
-**Error** it_disk.asm(2959) Undefined symbol: ECX
-**Error** it_disk.asm(2960) Undefined symbol: EDI
-*Warning* it_disk.asm(2960) Argument needs type override
-**Error** it_disk.asm(2969) Undefined symbol: ECX
-**Error** it_disk.asm(2970) Undefined symbol: ECX
+**Error** it_disk.asm(2657) Undefined symbol: EAX
+*Warning* it_disk.asm(2657) Argument needs type override
+**Error** it_disk.asm(2670) Undefined symbol: EAX
+*Warning* it_disk.asm(2670) Argument needs type override
+**Error** it_disk.asm(2686) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(2690) Undefined symbol: EAX
+*Warning* it_disk.asm(2690) Argument needs type override
+**Error** it_disk.asm(2734) Undefined symbol: EAX
+**Error** it_disk.asm(2753) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(2803) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(2874) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(2876) Undefined symbol: EDX
+*Warning* it_disk.asm(2876) Argument needs type override
+**Error** it_disk.asm(2877) Undefined symbol: EDX
+*Warning* it_disk.asm(2877) Argument needs type override
+**Error** it_disk.asm(2907) Undefined symbol: EDX
+*Warning* it_disk.asm(2907) Argument needs type override
+**Error** it_disk.asm(2916) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(2926) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(2931) Undefined symbol: EDX
+*Warning* it_disk.asm(2931) Argument needs type override
+**Error** it_disk.asm(2939) Undefined symbol: EDI
+*Warning* it_disk.asm(2939) Argument needs type override
+**Error** it_disk.asm(2952) Undefined symbol: EDI
+**Error** it_disk.asm(2961) Undefined symbol: ECX
+**Error** it_disk.asm(2962) Undefined symbol: EDI
+*Warning* it_disk.asm(2962) Argument needs type override
 **Error** it_disk.asm(2971) Undefined symbol: ECX
-*Warning* it_disk.asm(2971) Argument needs type override
 **Error** it_disk.asm(2972) Undefined symbol: ECX
-*Warning* it_disk.asm(2972) Argument needs type override
-**Error** it_disk.asm(3045) Undefined symbol: EAX
-**Error** it_disk.asm(3046) Undefined symbol: EAX
-**Error** it_disk.asm(3060) Undefined symbol: EAX
-*Warning* it_disk.asm(3060) Argument needs type override
-**Error** it_disk.asm(3064) Undefined symbol: EAX
-*Warning* it_disk.asm(3064) Argument needs type override
-**Error** it_disk.asm(3214) Undefined symbol: EDI
-**Error** it_disk.asm(3222) Undefined symbol: EDI
-**Error** it_disk.asm(3229) Undefined symbol: EDI
-**Error** it_disk.asm(3237) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3243) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3244) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3253) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3305) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3312) Undefined symbol: EDI
-*Warning* it_disk.asm(3312) Argument needs type override
-**Error** it_disk.asm(3315) Undefined symbol: EDI
-*Warning* it_disk.asm(3315) Argument needs type override
-**Error** it_disk.asm(3328) Undefined symbol: ECX
-**Error** it_disk.asm(3329) Undefined symbol: EDI
-*Warning* it_disk.asm(3329) Argument needs type override
-**Error** it_disk.asm(3349) Undefined symbol: EDI
-**Error** it_disk.asm(3357) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3373) Undefined symbol: EBP
-*Warning* it_disk.asm(3373) Argument needs type override
+**Error** it_disk.asm(2973) Undefined symbol: ECX
+*Warning* it_disk.asm(2973) Argument needs type override
+**Error** it_disk.asm(2974) Undefined symbol: ECX
+*Warning* it_disk.asm(2974) Argument needs type override
+**Error** it_disk.asm(3047) Undefined symbol: EAX
+**Error** it_disk.asm(3048) Undefined symbol: EAX
+**Error** it_disk.asm(3062) Undefined symbol: EAX
+*Warning* it_disk.asm(3062) Argument needs type override
+**Error** it_disk.asm(3066) Undefined symbol: EAX
+*Warning* it_disk.asm(3066) Argument needs type override
+**Error** it_disk.asm(3216) Undefined symbol: EDI
+**Error** it_disk.asm(3224) Undefined symbol: EDI
+**Error** it_disk.asm(3231) Undefined symbol: EDI
+**Error** it_disk.asm(3239) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3245) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3246) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3255) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3307) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3314) Undefined symbol: EDI
+*Warning* it_disk.asm(3314) Argument needs type override
+**Error** it_disk.asm(3317) Undefined symbol: EDI
+*Warning* it_disk.asm(3317) Argument needs type override
+**Error** it_disk.asm(3330) Undefined symbol: ECX
+**Error** it_disk.asm(3331) Undefined symbol: EDI
+*Warning* it_disk.asm(3331) Argument needs type override
+**Error** it_disk.asm(3351) Undefined symbol: EDI
+**Error** it_disk.asm(3359) Illegal instruction for currently selected processor(s)
 **Error** it_disk.asm(3375) Undefined symbol: EBP
 *Warning* it_disk.asm(3375) Argument needs type override
-**Error** it_disk.asm(3376) Undefined symbol: EBP
-*Warning* it_disk.asm(3376) Argument needs type override
-**Error** it_disk.asm(3377) Undefined symbol: EBX
+**Error** it_disk.asm(3377) Undefined symbol: EBP
 *Warning* it_disk.asm(3377) Argument needs type override
-**Error** it_disk.asm(3380) Undefined symbol: EBX
-*Warning* it_disk.asm(3380) Argument needs type override
-**Error** it_disk.asm(3382) Undefined symbol: EAX
+**Error** it_disk.asm(3378) Undefined symbol: EBP
+*Warning* it_disk.asm(3378) Argument needs type override
+**Error** it_disk.asm(3379) Undefined symbol: EBX
+*Warning* it_disk.asm(3379) Argument needs type override
+**Error** it_disk.asm(3382) Undefined symbol: EBX
 *Warning* it_disk.asm(3382) Argument needs type override
-**Error** it_disk.asm(3389) Undefined symbol: EAX
-*Warning* it_disk.asm(3389) Argument needs type override
-**Error** it_disk.asm(3408) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3415) Undefined symbol: EDI
-*Warning* it_disk.asm(3415) Argument needs type override
-**Error** it_disk.asm(3418) Undefined symbol: EDI
-*Warning* it_disk.asm(3418) Argument needs type override
-**Error** it_disk.asm(3427) Undefined symbol: EDI
-**Error** it_disk.asm(3431) Undefined symbol: ECX
-**Error** it_disk.asm(3432) Undefined symbol: EDI
-*Warning* it_disk.asm(3432) Argument needs type override
-**Error** it_disk.asm(3668) Undefined symbol: EAX
-*Warning* it_disk.asm(3668) Argument needs type override
-**Error** it_disk.asm(3703) Undefined symbol: EBX
-*Warning* it_disk.asm(3703) Argument needs type override
-**Error** it_disk.asm(3706) Undefined symbol: EBX
-*Warning* it_disk.asm(3706) Argument needs type override
-**Error** it_disk.asm(3718) Undefined symbol: EBX
-**Error** it_disk.asm(3726) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3866) Undefined symbol: EAX
-*Warning* it_disk.asm(3866) Argument needs type override
-**Error** it_disk.asm(3927) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3956) Undefined symbol: EDI
-**Error** it_disk.asm(3963) Undefined symbol: EDI
-**Error** it_disk.asm(3971) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3980) Illegal instruction for currently selected processor(s)
-**Error** it_disk.asm(3985) Undefined symbol: EDI
-*Warning* it_disk.asm(3985) Argument needs type override
-**Error** it_disk.asm(3988) Undefined symbol: EDI
-*Warning* it_disk.asm(3988) Argument needs type override
-**Error** it_disk.asm(4000) Undefined symbol: ECX
-**Error** it_disk.asm(4001) Undefined symbol: EDI
-*Warning* it_disk.asm(4001) Argument needs type override
-**Error** it_disk.asm(4013) Undefined symbol: EDI
-**Error** it_disk.asm(4021) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1024) Argument to operation or instruction has illegal size
-**Error** it_d_rm.inc(1030) Undefined symbol: ECX
-*Warning* it_d_rm.inc(1030) Argument needs type override
-**Error** it_d_rm.inc(1031) Undefined symbol: ECX
-*Warning* it_d_rm.inc(1031) Argument needs type override
-**Error** it_d_rm.inc(1032) Undefined symbol: ECX
-*Warning* it_d_rm.inc(1032) Argument needs type override
-**Error** it_d_rm.inc(1060) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1060) Argument needs type override
-**Error** it_d_rm.inc(1061) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1081) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1081) Argument needs type override
-**Error** it_d_rm.inc(1082) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1083) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1083) Argument needs type override
-**Error** it_d_rm.inc(1084) Illegal instruction for currently selected processor(s)
-**Error** it_d_rm.inc(1433) Undefined symbol: EAX
-**Error** it_d_rm.inc(1437) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1437) Argument needs type override
-**Error** it_d_rm.inc(1438) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1438) Argument needs type override
-**Error** it_d_rm.inc(1439) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1439) Argument needs type override
-**Error** it_d_rm.inc(1440) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1440) Argument needs type override
-**Error** it_d_rm.inc(1441) Undefined symbol: EAX
-*Warning* it_d_rm.inc(1441) Argument needs type override
-**Error** it_d_rm.inc(1444) Too many errors or warnings
+**Error** it_disk.asm(3384) Undefined symbol: EAX
+*Warning* it_disk.asm(3384) Argument needs type override
+**Error** it_disk.asm(3391) Undefined symbol: EAX
+*Warning* it_disk.asm(3391) Argument needs type override
+**Error** it_disk.asm(3410) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3417) Undefined symbol: EDI
+*Warning* it_disk.asm(3417) Argument needs type override
+**Error** it_disk.asm(3420) Undefined symbol: EDI
+*Warning* it_disk.asm(3420) Argument needs type override
+**Error** it_disk.asm(3429) Undefined symbol: EDI
+**Error** it_disk.asm(3433) Undefined symbol: ECX
+**Error** it_disk.asm(3434) Undefined symbol: EDI
+*Warning* it_disk.asm(3434) Argument needs type override
+**Error** it_disk.asm(3670) Undefined symbol: EAX
+*Warning* it_disk.asm(3670) Argument needs type override
+**Error** it_disk.asm(3705) Undefined symbol: EBX
+*Warning* it_disk.asm(3705) Argument needs type override
+**Error** it_disk.asm(3708) Undefined symbol: EBX
+*Warning* it_disk.asm(3708) Argument needs type override
+**Error** it_disk.asm(3720) Undefined symbol: EBX
+**Error** it_disk.asm(3728) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3868) Undefined symbol: EAX
+*Warning* it_disk.asm(3868) Argument needs type override
+**Error** it_disk.asm(3929) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3958) Undefined symbol: EDI
+**Error** it_disk.asm(3965) Undefined symbol: EDI
+**Error** it_disk.asm(3973) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3982) Illegal instruction for currently selected processor(s)
+**Error** it_disk.asm(3987) Undefined symbol: EDI
+*Warning* it_disk.asm(3987) Argument needs type override
+**Error** it_disk.asm(3990) Undefined symbol: EDI
+*Warning* it_disk.asm(3990) Argument needs type override
+**Error** it_disk.asm(4002) Undefined symbol: ECX
+**Error** it_disk.asm(4003) Undefined symbol: EDI
+*Warning* it_disk.asm(4003) Argument needs type override
+**Error** it_disk.asm(4015) Undefined symbol: EDI
+**Error** it_disk.asm(4023) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(2338) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2338) Argument needs type override
+**Error** it_d_rm.inc(2339) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(2346) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2346) Argument needs type override
+**Error** it_d_rm.inc(2347) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(2348) Undefined symbol: EDX
+*Warning* it_d_rm.inc(2348) Argument needs type override
+**Error** it_d_rm.inc(2350) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(2356) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2356) Argument needs type override
+**Error** it_d_rm.inc(2359) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2359) Argument needs type override
+**Error** it_d_rm.inc(2362) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2362) Argument needs type override
+**Error** it_d_rm.inc(2365) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(2366) Undefined symbol: ECX
+*Warning* it_d_rm.inc(2366) Argument needs type override
+**Error** it_d_rm.inc(2368) Illegal instruction for currently selected processor(s)
+**Error** it_d_rm.inc(2374) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2374) Argument needs type override
+**Error** it_d_rm.inc(2377) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2377) Argument needs type override
+**Error** it_d_rm.inc(2378) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2378) Argument needs type override
+**Error** it_d_rm.inc(2381) Undefined symbol: EAX
+*Warning* it_d_rm.inc(2381) Argument needs type override
+**Error** it_d_rm.inc(2384) Too many errors or warnings
 Error messages:    101
 Warning messages:  45
 Passes:            3
-Remaining memory:  163k
+Remaining memory:  165k
 
 
 ** error 1 ** deleting it_disk.obj

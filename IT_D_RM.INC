@@ -1021,15 +1021,19 @@ stosw               ; [ES:DI] <- AX, DI <- DI + 2
                 And     AL, 1
                 Add     AL, AL
 
-                Cmp     DWord Ptr [DS:SI+22], 0
+;;                Cmp     DWord Ptr [DS:SI+22], 0
+                Cmp     Word Ptr [DS:SI+22], 0
                 JE      D_LoadMTM3              ; Sample length = 0.
 
                 Or      AL, 1                   ; Else there's a sample.
 
 D_LoadMTM3:
-                Mov     ECX, [SI+30]             ; Sample loop end
-                Sub     ECX, [SI+26]             ; Sample loop start
-                Cmp     ECX, 2
+;;                 Mov     ECX, [SI+30]             ; Sample loop end
+;;                 Sub     ECX, [SI+26]             ; Sample loop start
+;;                 Cmp     ECX, 2
+                Mov     CX, [SI+30]             ; Sample loop end
+                Sub     CX, [SI+26]             ; Sample loop start
+                Cmp     CX, 2
                 JBE     D_LoadMTM4
 
                 Or      AL, 16
@@ -1057,8 +1061,13 @@ D_LoadMTMSampleName:
                 Mov     AL, 32
                 StosB
 
-                Mov     EAX, [DS:SI+22]
-                StosD
+;;                Mov     EAX, [DS:SI+22]
+;;                StosD
+    MOV AX, [DS:SI+22]      ; Copy the lower 16 bits (Word) into AX
+    MOV DX, [DS:SI+24]      ; Copy the upper 16 bits (Word) into DX
+    STOSW                   ; Store AX at ES:DI, and increment DI by 2
+    MOV AX, DX              ; Move the upper word (from DX) into AX for the next store
+    STOSW                   ; Store AX at ES:DI, and increment DI by 2
 
                 Test    DL, 1
                 JNZ     D_LoadMTM5
@@ -1078,10 +1087,33 @@ D_LoadMTM5:
                 Test    DL, 16
                 JZ      D_LoadMTM6
 
-                Mov     EAX, [DS:SI+26]
-                StosD
-                Mov     EAX, [DS:SI+30]
-                StosD
+;;                Mov     EAX, [DS:SI+26]
+;;                StosD
+;;                Mov     EAX, [DS:SI+30]
+;;                StosD
+; Read the first 32-bit value into AX and DX
+Mov     AX, [DS:SI+26]   ; Move the lower 16 bits
+Mov     DX, [DS:SI+28]   ; Move the upper 16 bits
+
+; Store the first 32-bit value using two 16-bit StosW instructions
+push    AX              ; Use the stack as a temporary holding area
+push    DX              ; to preserve the order
+pop     AX              ; Restore DX as AX and AX as DX
+pop     DX              ; Note: the previous two instructions are equivalent to xchg AX,DX
+StosW                   ; Store the word in AX (the upper 16 bits)
+StosW                   ; Store the word in DX (the lower 16 bits)
+
+; Read the second 32-bit value into AX and DX
+Mov     AX, [DS:SI+30]   ; Move the lower 16 bits
+Mov     DX, [DS:SI+32]   ; Move the upper 16 bits
+
+; Store the second 32-bit value
+push    AX
+push    DX
+pop     AX
+pop     DX
+StosW
+StosW
                 Jmp     D_LoadMTM7
 
 D_LoadMTM6:
@@ -1430,18 +1462,31 @@ D_LoadS3M2:
                 StosB
                 Add     DI, 7
 
-                Mov     EAX, [DS:60000+38h]
-                Cmp     Word Ptr [DS:60000+28h], 3208h
-                JB      D_ConvertS3MTimer
+;;                 Mov     EAX, [DS:60000+38h]
+;;                 Cmp     Word Ptr [DS:60000+28h], 3208h
+;;                 JB      D_ConvertS3MTimer
+;;
+;;                 Xor     EAX, 'ITRK'
+;;                 RoR     EAX, 7
+;;                 Neg     EAX
+;;                 RoL     EAX, 4
+;;                 Xor     EAX, 'JTHL'
+;;
+;; D_ConvertS3MTimer:
+;;                 StosD
+    MOV     AX, [DS:60000+38h]    ; Load word from memory into AX
+    CMP     [DS:60000+28h], 3208h  ; Compare word in memory with 3208h
+    JB      D_ConvertS3MTimer    ; Jump below if memory < 3208h
 
-                Xor     EAX, 'ITRK'
-                RoR     EAX, 7
-                Neg     EAX
-                RoL     EAX, 4
-                Xor     EAX, 'JTHL'
+    XOR     AX, 'IT'             ; XOR AX with 'IT'
+    ROR     AX, 7                ; Rotate right AX by 7 bits
+    NEG     AX                 ; Negate AX
+    ROL     AX, 4                ; Rotate left AX by 4 bits
+    XOR     AX, 'JT'             ; XOR AX with 'JT'
 
 D_ConvertS3MTimer:
-                StosD
+    STOSW                        ; Store AX to memory at ES:DI, increment DI
+
                                         ; OK, panning now...
                 Mov     SI, 60000+40h
                 Mov     CX, 32
@@ -1560,7 +1605,29 @@ D_LoadS3M7:
 
                 Mov     AX, 4200h
                 Xor     CX, CX
-                ShLD    CX, DX, 4
+;;                ShLD    CX, DX, 4
+; Emulate SHLD CX, DX, 4 on an 8086 processor
+
+; Step 1: Shift the lower word (CX) left by 4 bits.
+; The high-order 4 bits of CX will be moved into the carry flag.
+; The lower 4 bits will be filled with zeros.
+; We need to save the 4 bits that are shifted out for later.
+MOV AL, CH    ; Save the original high byte of CX in AL.
+SHL CX, 4     ; Shift CX left by 4 bits.
+
+; Step 2: Prepare the bits to be shifted into CX.
+; The high-order 4 bits of DX need to be extracted and
+; moved into the low-order 4 bits of the original CH.
+MOV CH, DH    ; Copy the high byte of DX to the high byte of CX.
+SHR CH, 4     ; Shift CH (which holds DH) right by 4 to get the desired bits.
+AND AL, 0FH   ; Isolate the high 4 bits of the original CX.
+
+; Step 3: Combine the shifted parts and move them back into CX.
+; The new value of CX is a combination of the old CX (shifted left)
+; and the high bits of DX.
+OR CH, AL     ; Merge the shifted-in DX bits with the high-order bits of the original CX.
+
+; The result of the operation is now in the CX register.
                 ShL     DX, 4
                 Int     21h
 
@@ -1578,8 +1645,19 @@ D_LoadS3M7:
                 Mov     AH, 3Fh
                 Int     21h
 
-                Mov     EAX, 'SPMI'
-                StosD
+;;                 Mov     EAX, 'SPMI'
+;;                 StosD
+    ; --- Equivalent of Mov EAX, 'SPMI' ---
+    mov ax, 'SP'     ; Load the low 16 bits ('SP') into AX
+    mov dx, 'MI'     ; Load the high 16 bits ('MI') into DX
+
+    ; --- Equivalent of StosD ---
+    mov di, offset buffer  ; Set DI to the start of the buffer
+    mov es, ax           ; Move @data to ES to correctly address the buffer (optional for small model)
+    mov ax, 'SP'         ; Move the first two characters to AX
+    stosw                ; Store AX at ES:DI, then increment DI by 2
+    mov ax, 'MI'         ; Move the next two characters to AX
+    stosw                ; Store AX at ES:DI, then increment DI by 2
 
                 Mov     SI, 1025
                 Mov     CX, 12
@@ -1626,17 +1704,49 @@ D_LoadS3M9:
                 Mov     AL, 32
                 StosB
 
-                Mov     EAX, [DS:1024+10h]
-                StosD                   ; Length
+;;                 Mov     EAX, [DS:1024+10h]
+;;                 StosD                   ; Length
+;;
+;;                 Mov     EAX, [DS:1024+14h]
+;;                 StosD                   ; LoopBeg
+;;
+;;                 Mov     EAX, [DS:1024+18h]
+;;                 StosD                   ; LoopEnd
+;;
+;;                 Mov     EAX, [DS:1024+20h]
+;;                 StosD                   ; C5Spd
+; Assuming DS is already set up to point to the base of the data.
+; Also assumes DI points to the start of the destination memory.
 
-                Mov     EAX, [DS:1024+14h]
-                StosD                   ; LoopBeg
+; Copy the 32-bit value at DS:[1024+10h]
+Mov     BX, 1024h        ; Use BX as a base for the offset
+Mov     AX, [BX+10h]     ; Load the lower 16 bits
+Mov     DX, [BX+12h]     ; Load the upper 16 bits
+StosW                    ; Store AX to ES:DI, DI += 2
+Mov     AX, DX           ; Move upper 16 bits to AX for the next StosW
+StosW                    ; Store DX to ES:DI, DI += 2
 
-                Mov     EAX, [DS:1024+18h]
-                StosD                   ; LoopEnd
+; Copy the 32-bit value at DS:[1024+14h]
+Mov     AX, [BX+14h]
+Mov     DX, [BX+16h]
+StosW
+Mov     AX, DX
+StosW
 
-                Mov     EAX, [DS:1024+20h]
-                StosD                   ; C5Spd
+; Copy the 32-bit value at DS:[1024+18h]
+Mov     AX, [BX+18h]
+Mov     DX, [BX+1Ah]
+StosW
+Mov     AX, DX
+StosW
+
+; Copy the 32-bit value at DS:[1024+20h]
+Mov     AX, [BX+20h]
+Mov     DX, [BX+22h]
+StosW
+Mov     AX, DX
+StosW
+
 
                 Xor     AX, AX
                 StosW
@@ -1728,7 +1838,8 @@ D_LoadS3M17:                                    ; OK, now load the samples.
                 Jmp     D_LoadS3MSamplePresent
 
 D_LoadS3M18:
-                Mov     DWord Ptr [SI+48h], 0
+;;                Mov     DWord Ptr [SI+48h], 0
+                Mov     Word Ptr [SI+48h], 0
 
 D_LoadS3MSamplePresent:
                 Pop     ES
@@ -1768,7 +1879,13 @@ D_LoadS3M11:
                 Push    CX
 
                 Xor     CX, CX
-                ShLD    CX, DX, 4
+;;                ShLD    CX, DX, 4
+    MOV  AX, CX       ; Save the original value of CX in AX
+    SHL  CX, 4        ; Shift CX left by 4, emptying the low 4 bits
+    MOV  CL, 4        ; Load shift count into CL for the next instruction
+    SHR  DX, CL       ; Shift DX right by 4 to isolate the low 4 bits
+    OR   CX, DX       ; OR the lowest bits of DX into CX
+
                 ShL     DX, 4
                 Mov     AX, 4200h
                 Int     21h
@@ -1882,42 +1999,96 @@ D_Load669_1:
                 Cmp     BP, [ES:24h]
                 JAE     D_Load669_2
 
-                Mov     EAX, 'SPMI'
-                StosD
+;;                Mov     EAX, 'SPMI'
+;;                StosD
+; Move the 'MI' part (lower 16 bits) into the AX register
+mov ax, 'MI'        ; AX = 494Dh (ASCII for 'I' followed by 'M')
+; Store AX at ES:DI and advance DI by 2
+stosw               ; [ES:DI] <- AX, DI <- DI + 2
+; Move the 'SP' part (upper 16 bits) into the AX register
+mov ax, 'SP'        ; AX = 5053h (ASCII for 'P' followed by 'S')
+; Store AX at ES:DI and advance DI by 2
+stosw               ; [ES:DI] <- AX, DI <- DI + 2
                 Mov     CX, 6
                 Rep     MovsW
                 Mov     AX, 4000h
                 StosW
 
-                ; Flag, volume
-                Mov     AH, 60
+;;                 ; Flag, volume
+;;                 Mov     AH, 60
+;;                 Inc     SI
+;;                 Mov     ECX, [SI]
+;;                 Test    ECX, ECX
+;;                 JZ      D_Load669_3
+;;
+;;                 Xor     EAX, EAX
+;;                 Mov     [ES:DI+22h], EAX
+;;                 Mov     [ES:DI+26h], EAX
+;;
+;;                 Mov     AX, 3C01h       ; Sample present
+;;
+;;                 Mov     ECX, [SI+8]     ; End loop
+;;
+;;                 Cmp     ECX, [SI]
+;;                 JA      D_Load669_3
+;;
+;;                 Sub     ECX, [SI+4]     ; Start loop
+;;                 JC      D_Load669_3
+;;                 Cmp     ECX, 2
+;;                 JB      D_Load669_3
+;;
+;;                 Mov     ECX, [SI+4]
+;;                 Mov     [ES:DI+22h], ECX
+;;                 Mov     ECX, [SI+8]
+;;                 Mov     [ES:DI+26h], ECX
+;;
+;;                 Mov     AX, 3C11h       ; Sample present, forwards loop
+                ; Convert 32-bit code to 16-bit 8086 assembly (Simplified)
+                Mov     AH, 60h
                 Inc     SI
-                Mov     ECX, [SI]
-                Test    ECX, ECX
+
+                ; Mov ECX, [SI] -> Mov CX, [SI]
+                Mov     CX, [SI]
+                ; Test ECX, ECX -> Test CX, CX
+                Test    CX, CX
                 JZ      D_Load669_3
 
-                Xor     EAX, EAX
-                Mov     [ES:DI+22h], EAX
-                Mov     [ES:DI+26h], EAX
+                ; Xor EAX, EAX -> Xor AX, AX
+                Xor     AX, AX
 
-                Mov     AX, 3C01h       ; Sample present
+                ; Mov [ES:DI+22h], EAX -> Mov [ES:DI+22h], AX
+                Mov     [ES:DI+22h], AX
 
-                Mov     ECX, [SI+8]     ; End loop
+                ; Mov [ES:DI+26h], EAX -> Mov [ES:DI+26h], AX
+                Mov     [ES:DI+26h], AX
+                Mov     AX, 3C01h
 
-                Cmp     ECX, [SI]
+                ; Mov ECX, [SI+8] -> Mov CX, [SI+8]
+                Mov     CX, [SI+8]
+
+                ; Cmp ECX, [SI] -> Cmp CX, [SI]
+                Cmp     CX, [SI]
                 JA      D_Load669_3
 
-                Sub     ECX, [SI+4]     ; Start loop
+                ; Sub ECX, [SI+4] -> Sub CX, [SI+4]
+                Sub     CX, [SI+4]
                 JC      D_Load669_3
-                Cmp     ECX, 2
+                Cmp     CX, 2
                 JB      D_Load669_3
 
-                Mov     ECX, [SI+4]
-                Mov     [ES:DI+22h], ECX
-                Mov     ECX, [SI+8]
-                Mov     [ES:DI+26h], ECX
+                ; Mov ECX, [SI+4] -> Mov CX, [SI+4]
+                Mov     CX, [SI+4]
 
-                Mov     AX, 3C11h       ; Sample present, forwards loop
+                ; Mov [ES:DI+22h], ECX -> Mov [ES:DI+22h], CX
+                Mov     [ES:DI+22h], CX
+
+                ; Mov ECX, [SI+8] -> Mov CX, [SI+8]
+                Mov     CX, [SI+8]
+
+                ; Mov [ES:DI+26h], ECX -> Mov [ES:DI+26h], CX
+                Mov     [ES:DI+26h], CX
+
+                Mov     AX, 3C11h
 
 D_Load669_3:
                 StosW
@@ -2125,8 +2296,16 @@ D_LoadMOD2:
 D_LoadMOD3:
                 Push    CX
 
-                Mov     EAX, 'SPMI'
-                StosD
+;;                Mov     EAX, 'SPMI'
+;;                StosD
+; Move the 'MI' part (lower 16 bits) into the AX register
+mov ax, 'MI'        ; AX = 494Dh (ASCII for 'I' followed by 'M')
+; Store AX at ES:DI and advance DI by 2
+stosw               ; [ES:DI] <- AX, DI <- DI + 2
+; Move the 'SP' part (upper 16 bits) into the AX register
+mov ax, 'SP'        ; AX = 5053h (ASCII for 'P' followed by 'S')
+; Store AX at ES:DI and advance DI by 2
+stosw               ; [ES:DI] <- AX, DI <- DI + 2
 
                 Mov     CX, 6
                 Xor     AX, AX
