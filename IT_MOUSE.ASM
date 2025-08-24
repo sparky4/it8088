@@ -3,7 +3,7 @@
 ;юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
                         Jumps
-                        .8086
+                        .386P
 
 ; MouseRecord Structure...
 ;  Area         DW      Left, Top, Right, Bottom

@@ -2,8 +2,8 @@
 ;³ Music Module                                                                ³
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-                        .8086
-                        .8087
+                        .386
+                        .387
 
 include switch.inc
 include network.inc
@@ -5359,7 +5359,7 @@ UpdateData_PlayMode2:
 
                 Test    OrderLockFlag, 1
                 JNZ     UpdateData_Song5
-
+                                        
                 Mov     BX, ProcessOrder        ; Get new pattern.
                 Xor     DX, DX
                 Inc     BX
@@ -6032,7 +6032,7 @@ Music_PlayNote4:
                 Push    CS
                 Pop     DS
                         Assume DS:Music
-
+                        
                 Push    DX
 
                 And     DH, 7Fh

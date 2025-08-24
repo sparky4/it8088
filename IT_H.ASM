@@ -2,7 +2,7 @@
 ;³ Help Module                                                                 ³
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
 
-                        .8086
+                        .386
                         Jumps
 
 include switch.inc
@@ -25,7 +25,7 @@ EndS
 ;ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
 ;³ Globals                                                                     ³
 ;ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
-
+                                 
                 Global  H_SetHelpContext:Far
                 Global  H_DrawHelp:Far
                 Global  H_Help:Far
@@ -68,7 +68,7 @@ HelpContext             DW      0
 TopLine                 DW      0
 
 Positions               DW      15 Dup (0)
-
+              
 HelpContextPtrs         Label   Word
                         DW      Offset HelpContext0Ptrs
                         DW      Offset HelpContext1Ptrs
@@ -118,8 +118,8 @@ NoHelpContext           DW      Offset NewLine
                         DW      Offset HelpGlobal_21
                         DW      Offset HelpGlobal_14
                         DW      Offset HelpGlobal_15
-                        DW      0
-
+                        DW      0                                
+   
 HelpContext0Ptrs        DW      Offset HelpContext0_26
                         DW      Offset HelpContext0_0
                         DW      Offset HelpContext0_27
@@ -170,7 +170,7 @@ HelpContext0Ptrs        DW      Offset HelpContext0_26
                         DW      Offset HelpGlobal_15
                         DW      Offset NewLine
                         DW      Offset Divider
-                        DW      0
+                        DW      0                                
 
 HelpContext4Ptrs        DW      Offset HelpContext4_0
                         DW      Offset HelpContext4_1
@@ -222,7 +222,7 @@ HelpContext4Ptrs        DW      Offset HelpContext4_0
                         DW      Offset HelpGlobal_15
                         DW      Offset NewLine
                         DW      Offset Divider
-                        DW      0
+                        DW      0                                
 
 NewLine                 DB      0, 0
 Divider                 DB      2, 0FFh, 76, 154, 0
@@ -1538,7 +1538,7 @@ Proc            H_SetHelpContext Far
 
                 Mov     AX, [SI+2]
                 Mov     CS:HelpContext, AX
-
+             
                 Ret
 
 EndP            H_SetHelpContext

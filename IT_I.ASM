@@ -3,7 +3,7 @@
 ;юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
 
                         Jumps
-                        .8086
+                        .386
 
 include switch.inc
 include network.inc
@@ -3391,7 +3391,7 @@ I_ReMix8Bit:
                 Div     CS:NewSampleSize
 
                 ShR     EAX, 16
-                Mov     BX, AX
+                Mov     BX, AX                
 
                                                 ; BP:BX = skip value.
                 Xor     ESI, ESI                ; DS:ESI = source
@@ -3500,7 +3500,7 @@ I_ReMix16Bit:
                 Div     CS:NewSampleSize
 
                 ShR     EAX, 16
-                Mov     BX, AX
+                Mov     BX, AX                
 
                                                 ; BP:BX = skip value.
                 Xor     ESI, ESI                ; DS:ESI = source
@@ -3651,7 +3651,7 @@ I_ReMix5:
 
                 Cmp     EDX, ECX
                 JAE     I_ReMix6
-
+                
                 Div     ECX
                 Cmp     EAX, 9999999
                 JB      I_ReMix7

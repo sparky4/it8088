@@ -5,7 +5,7 @@ TUTORIAL        = 0
 
   EMSUSE41        = 0
 
-  SHOWVERSION         = 1
+  SHOWVERSION         = 0
   SHOWREGISTERNAME    = 1
 
   USE32BITSCREENCOPY  = 0

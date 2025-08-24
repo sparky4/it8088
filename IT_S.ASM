@@ -5,7 +5,7 @@
 include switch.inc
 
                         Jumps
-                        .8086
+                        .386
 
 Segment         Mouse BYTE Public 'Code'
                 Extrn   MouseCharacterGenerationOffset:Word
